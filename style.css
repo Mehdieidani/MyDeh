@@ -1,46 +1,51 @@
-
 body {
-    font-family: Tahoma, sans-serif;
-    background-color: #f5fff5;
-    color: #06470c;
-    margin: 0;
-    padding: 0;
+  font-family: tahoma, sans-serif;
+  background: #f6fff6;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  line-height: 1.8;
+  direction: rtl;
 }
 
 header {
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-    padding: 1em 0;
+  background: #2e7d32;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 section {
-    padding: 20px;
-    margin: 10px;
-    background-color: #e6ffe6;
-    border-radius: 8px;
+  margin: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 h2 {
-    color: #06470c;
+  color: #2e7d32;
+}
+
+.weather-info p {
+  margin: 5px 0;
+}
+
+input, button {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+  background: #2e7d32;
+  color: white;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
-}
-
-footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+  background: #1b5e20;
 }
