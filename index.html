@@ -34,7 +34,7 @@ footer{text-align:center; padding:1rem; background:#2e7d32; color:#fff;}
 <h2>🔑 ورود مدیر</h2>
 <input type="text" id="username" placeholder="نام کاربری">
 <input type="password" id="password" placeholder="رمز عبور">
-<button onclick="login()">ورود</button>
+<button id="loginBtn">ورود</button>
 <p id="loginMsg" style="color:red;"></p>
 </section>
 
@@ -83,6 +83,9 @@ footer{text-align:center; padding:1rem; background:#2e7d32; color:#fff;}
 let articles=[];
 const admin={username:'09163153189', password:'Mehdi13721#'};
 
+// اتصال دکمه ورود با addEventListener
+document.getElementById('loginBtn').addEventListener('click', login);
+
 function login(){
     const user=document.getElementById('username').value;
     const pass=document.getElementById('password').value;
@@ -94,7 +97,9 @@ function login(){
         document.getElementById('commentsSection').style.display='block';
         document.getElementById('adsSection').style.display='block';
         loadArticles();
-    }else{ msg.textContent='نام کاربری یا رمز عبور اشتباه است'; }
+    } else { 
+        msg.textContent='نام کاربری یا رمز عبور اشتباه است'; 
+    }
 }
 
 function saveArticles(){ localStorage.setItem('articles', JSON.stringify(articles)); renderArticles(); }
@@ -116,16 +121,19 @@ contentDiv.style.display=contentDiv.style.display==='none'?'block':'none';
 container.appendChild(card);
 });
 }
+
 function addArticle(){
 const title=document.getElementById('articleTitle').value;
 const content=document.getElementById('articleContent').value;
 if(title && content){articles.push({title, content}); document.getElementById('articleTitle').value=''; document.getElementById('articleContent').value=''; saveArticles();}
 }
+
 function editArticle(index){
 const newTitle=prompt('عنوان جدید:', articles[index].title);
 const newContent=prompt('متن جدید:', articles[index].content);
 if(newTitle && newContent){articles[index]={title:newTitle,content:newContent}; saveArticles();}
 }
+
 function deleteArticle(index){
 if(confirm('آیا مطمئن هستید می‌خواهید حذف کنید؟')){articles.splice(index,1); saveArticles();}
 }
@@ -135,10 +143,15 @@ const input=document.getElementById('commentInput');
 const text=input.value;
 if(text){const div=document.createElement('div'); div.className='comment'; div.textContent=text; document.getElementById('commentList').appendChild(div); input.value='';}
 }
+
 function updateAds(){
 const text=document.getElementById('adsText').value;
-document.getElementById('adsSection').querySelector('p').textContent=text;
+document.getElementById('adsSection').querySelector('p')?.remove();
+const p=document.createElement('p');
+p.textContent=text;
+document.getElementById('adsSection').appendChild(p);
 }
+
 function degToDir(deg){
 if(deg>=337.5||deg<22.5) return 'شمال';
 if(deg>=22.5&&deg<67.5) return 'شمال‌شرقی';
@@ -149,6 +162,7 @@ if(deg>=202.5&&deg<247.5) return 'جنوب‌غربی';
 if(deg>=247.5&&deg<292.5) return 'غرب';
 if(deg>=292.5&&deg<337.5) return 'شمال‌غربی';
 }
+
 async function getWeather(){
 const city=document.getElementById('cityInput').value;
 if(!city) return;
@@ -156,15 +170,7 @@ const apiKey='dc9c93f51cdd375d459483c2a9f86d88';
 const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
 const res=await fetch(url);
 const data=await res.json();
-if(data.cod!==200){document.getElementById('weatherResult').inner
-const apiKey='dc9c93f51cdd375d459483c2a9f86d88';
-const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
-const res=await fetch(url);
-const data=await res.json();
-if(data.cod!==200){
-    document.getElementById('weatherResult').innerHTML='<p>شهر یافت نشد.</p>';
-    return;
-}
+if(data.cod!==200){document.getElementById('weatherResult').innerHTML='<p>شهر یافت نشد.</p>'; return;}
 const dir=degToDir(data.wind.deg);
 document.getElementById('weatherResult').innerHTML=`
 <p>شهر: ${data.name}</p>
