@@ -5,75 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مای‌ده - کشاورزی اهواز</title>
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            background: #f8fff8;
-            color: #333;
-        }
-        header {
-            background: #2e7d32;
-            color: #fff;
-            padding: 1rem;
-            text-align: center;
-        }
-        nav {
-            background: #388e3c;
-            padding: .5rem;
-            text-align: center;
-        }
-        nav a {
-            color: #fff;
-            margin: 0 1rem;
-            text-decoration: none;
-        }
-        .slider {
-            position: relative;
-            max-width: 100%;
-            margin: auto;
-            overflow: hidden;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .slides {
-            display: flex;
-            transition: margin-right 0.5s;
-        }
-        .slide {
-            min-width: 100%;
-            padding: 1rem;
-        }
-        .weather, .ads, .contact, .add-article, .comments {
-            margin: 2rem;
-            padding: 1rem;
-            border-radius: 12px;
-            background: #fff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background: #2e7d32;
-            color: #fff;
-        }
-        input, textarea, button {
-            display: block;
-            width: 100%;
-            margin: .5rem 0;
-            padding: .5rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-        button {
-            background: #388e3c;
-            color: #fff;
-            cursor: pointer;
-        }
-        .comment {
-            padding: .5rem;
-            border-bottom: 1px solid #eee;
-        }
+        body { font-family: sans-serif; margin: 0; background: #f8fff8; color: #333; }
+        header { background: #2e7d32; color: #fff; padding: 1rem; text-align: center; }
+        nav { background: #388e3c; padding: .5rem; text-align: center; }
+        nav a { color: #fff; margin: 0 1rem; text-decoration: none; }
+        .articles-container { margin: 2rem; }
+        .article-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 1rem; margin-bottom: 1rem; cursor: pointer; }
+        .article-content { display: none; margin-top: .5rem; }
+        button { padding: .5rem 1rem; margin: .5rem .2rem; border: none; border-radius: 6px; cursor: pointer; }
+        .edit-btn { background: #1976d2; color: #fff; }
+        .delete-btn { background: #d32f2f; color: #fff; }
+        input, textarea { width: 100%; margin: .5rem 0; padding: .5rem; border-radius: 6px; border: 1px solid #ccc; }
+        .weather, .ads, .contact, .add-article, .comments { margin: 2rem; padding: 1rem; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        footer { text-align: center; padding: 1rem; background: #2e7d32; color: #fff; }
     </style>
 </head>
 <body>
@@ -86,24 +30,8 @@
         <a href="#contact">تماس با ما</a>
     </nav>
 
-    <section id="articles">
+    <section class="articles-container" id="articles">
         <h2 style="text-align:center; margin:1rem;">📚 مقالات کشاورزی</h2>
-        <div class="slider" id="articleSlider">
-            <div class="slides" id="slides">
-                <div class="slide">
-                    <h3>کاشت و فواید خیار در اهواز</h3>
-                    <p>خیار در اقلیم گرم اهواز در فصل تابستان، اوایل شهریور کاشته می‌شود و حدود ۴۰ روز بعد آماده برداشت است. این محصول نیاز به آبیاری منظم دارد. خیار منبع عالی آب و فیبر بوده و به خنک‌کردن بدن در تابستان کمک می‌کند و برای پوست بسیار مفید است.</p>
-                </div>
-                <div class="slide">
-                    <h3>گوجه‌فرنگی و کشت سنتی</h3>
-                    <p>در اهواز گوجه‌فرنگی بیشتر به روش سنتی جوی و پشته و آبیاری غرقابی کشت می‌شود. این گیاه پس از ۹۰ تا ۱۲۰ روز آماده برداشت است. گوجه‌فرنگی سرشار از ویتامین C و آنتی‌اکسیدان لیکوپن بوده که به سلامت قلب و پیشگیری از سرطان کمک می‌کند.</p>
-                </div>
-                <div class="slide">
-                    <h3>پیاز در اقلیم اهواز</h3>
-                    <p>پیاز یکی از محصولات پرمصرف در اهواز است. این گیاه در خاک حاصلخیز و آفتاب مستقیم رشد خوبی دارد. پیاز دارای ترکیبات گوگردی است که خاصیت ضدعفونی‌کننده دارد و در تقویت سیستم ایمنی بدن بسیار مؤثر است.</p>
-                </div>
-            </div>
-        </div>
     </section>
 
     <section class="add-article">
@@ -143,27 +71,63 @@
     </footer>
 
     <script>
-        // ذخیره و افزودن مقاله جدید
+        let articles = [];
+
+        function saveArticles(){
+            localStorage.setItem('articles', JSON.stringify(articles));
+            renderArticles();
+        }
+
+        function renderArticles(){
+            const container = document.getElementById('articles');
+            container.innerHTML = '<h2 style="text-align:center; margin:1rem;">📚 مقالات کشاورزی</h2>';
+            articles.forEach((a,index)=>{
+                const card = document.createElement('div');
+                card.className = 'article-card';
+                card.innerHTML = `<strong>${a.title}</strong>
+                                  <div class='article-content'>${a.content}</div>
+                                  <button class='edit-btn' onclick='editArticle(${index})'>ویرایش</button>
+                                  <button class='delete-btn' onclick='deleteArticle(${index})'>حذف</button>`;
+                card.querySelector('strong').onclick = function(){
+                    const contentDiv = card.querySelector('.article-content');
+                    contentDiv.style.display = contentDiv.style.display==='none'?'block':'none';
+                };
+                container.appendChild(card);
+            });
+        }
+
         function addArticle(){
             const title = document.getElementById('articleTitle').value;
             const content = document.getElementById('articleContent').value;
             if(title && content){
-                const slides = document.getElementById('slides');
-                const div = document.createElement('div');
-                div.className = 'slide';
-                div.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
-                slides.appendChild(div);
-                localStorage.setItem('articles', slides.innerHTML);
-                document.getElementById('articleTitle').value = '';
-                document.getElementById('articleContent').value = '';
+                articles.push({title, content});
+                document.getElementById('articleTitle').value='';
+                document.getElementById('articleContent').value='';
+                saveArticles();
             }
         }
-        // بارگذاری مقالات ذخیره‌شده
+
+        function editArticle(index){
+            const newTitle = prompt('عنوان جدید:', articles[index].title);
+            const newContent = prompt('متن جدید:', articles[index].content);
+            if(newTitle && newContent){
+                articles[index] = {title: newTitle, content: newContent};
+                saveArticles();
+            }
+        }
+
+        function deleteArticle(index){
+            if(confirm('آیا مطمئن هستید می‌خواهید حذف کنید؟')){
+                articles.splice(index,1);
+                saveArticles();
+            }
+        }
+
+        // بارگذاری مقالات ذخیره شده
         window.onload = function(){
             const saved = localStorage.getItem('articles');
-            if(saved){
-                document.getElementById('slides').innerHTML = saved;
-            }
+            if(saved){ articles = JSON.parse(saved); }
+            renderArticles();
         }
 
         // نظرات
