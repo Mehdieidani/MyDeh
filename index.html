@@ -1,148 +1,131 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مای ده - کشاورزی و هواشناسی</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      background-color: #f4f9f4; /* لون خلفية هادئ */
-      color: #333; /* لون النص */
-      font-family: "Tahoma", sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #006644; /* أخضر طبيعي */
-      color: white;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 5px solid #004d33;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin: 0;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-      color: #006644;
-    }
-
-    section {
-      padding: 20px;
-      margin: 15px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    #weather {
-      background-color: #e0f7fa; /* لون سماوي هادئ */
-    }
-
-    #articles ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    #articles li {
-      background: #e8f5e9;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    button {
-      background-color: #006644;
-      color: white;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #004d33; /* تأثير عند مرور الماوس */
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-
-    #contact p {
-      font-size: 1.2rem;
-    }
-
-    footer {
-      background-color: #006644;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      position: relative;
-      bottom: 0;
-      width: 100%;
-    }
-
-    footer a {
-      color: white;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مای‌ده - کشاورزی اهواز</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background: #f8fff8;
+            color: #333;
+        }
+        header {
+            background: #2e7d32;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            background: #388e3c;
+            padding: .5rem;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 1rem;
+            text-decoration: none;
+        }
+        .slider {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .slides {
+            display: flex;
+            width: 300%;
+            animation: slide 15s infinite;
+        }
+        .slide {
+            width: 100%;
+            padding: 2rem;
+        }
+        @keyframes slide {
+            0% {margin-right: 0;}
+            30% {margin-right: 0;}
+            35% {margin-right: -100%;}
+            65% {margin-right: -100%;}
+            70% {margin-right: -200%;}
+            100% {margin-right: -200%;}
+        }
+        .weather {
+            margin: 2rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #e8f5e9;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .ads, .contact {
+            margin: 2rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #2e7d32;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>🌱 وب اپ کشاورزی و هواشناسی مای ده</h1>
-  </header>
+    <header>
+        <h1>🌱 مای‌ده - بازارچه کشاورزی اهواز</h1>
+    </header>
+    <nav>
+        <a href="#articles">مقالات</a>
+        <a href="#weather">هواشناسی</a>
+        <a href="#contact">تماس با ما</a>
+    </nav>
 
-  <section id="weather">
-    <h2>☀️ وضعیت هوا</h2>
-    <div class="weather-info">
-      <p>دما: <span id="temp">--</span> °C</p>
-      <p>رطوبت: <span id="humidity">--</span> %</p>
-      <p>سرعت باد: <span id="wind">--</span> km/h</p>
-      <p>وضعیت آسمان: <span id="condition">--</span></p>
-    </div>
-    <input type="text" id="city" placeholder="نام شهر را وارد کنید (مثلاً Ahvaz)">
-    <button id="getWeather">نمایش وضعیت هوا</button>
-  </section>
+    <section id="articles">
+        <h2 style="text-align:center; margin:1rem;">📚 مقالات کشاورزی</h2>
+        <div class="slider">
+            <div class="slides">
+                <div class="slide">
+                    <h3>کاشت و فواید خیار در اهواز</h3>
+                    <p>خیار در اقلیم گرم اهواز در فصل تابستان، اوایل شهریور کاشته می‌شود و حدود ۴۰ روز بعد آماده برداشت است. این محصول نیاز به آبیاری منظم دارد. خیار منبع عالی آب و فیبر بوده و به خنک‌کردن بدن در تابستان کمک می‌کند و برای پوست بسیار مفید است.</p>
+                </div>
+                <div class="slide">
+                    <h3>گوجه‌فرنگی و کشت سنتی</h3>
+                    <p>در اهواز گوجه‌فرنگی بیشتر به روش سنتی جوی و پشته و آبیاری غرقابی کشت می‌شود. این گیاه پس از ۹۰ تا ۱۲۰ روز آماده برداشت است. گوجه‌فرنگی سرشار از ویتامین C و آنتی‌اکسیدان لیکوپن بوده که به سلامت قلب و پیشگیری از سرطان کمک می‌کند.</p>
+                </div>
+                <div class="slide">
+                    <h3>پیاز در اقلیم اهواز</h3>
+                    <p>پیاز یکی از محصولات پرمصرف در اهواز است. این گیاه در خاک حاصلخیز و آفتاب مستقیم رشد خوبی دارد. پیاز دارای ترکیبات گوگردی است که خاصیت ضدعفونی‌کننده دارد و در تقویت سیستم ایمنی بدن بسیار مؤثر است.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="articles">
-    <h2>📘 مقالات آموزشی کشاورزی</h2>
-    <ul id="articleList">
-      <li>افزایش کیفیت گوجه‌فرنگی در اهواز</li>
-      <li>روش‌های نوین آبیاری غرقابی</li>
-      <li>مدیریت خاک و کوددهی</li>
-    </ul>
-  </section>
+    <section id="weather" class="weather">
+        <h2>🌤️ وضعیت هوا در اهواز</h2>
+        <p>دمـا: ۴۲°C</p>
+        <p>رطوبت: ۳۲٪</p>
+        <p>سرعت باد: ۱۸ km/h جهت شمال‌غربی</p>
+        <p>آسمان: نیمه‌ابری</p>
+    </section>
 
-  <section id="contact">
-    <h2>📞 تماس با ما</h2>
-    <p>شماره تماس: 09332356547</p>
-    <p><a href="https://wa.me/989332356547" target="_blank">ارتباط در واتساپ</a></p>
-  </section>
+    <section class="ads">
+        <h2>📢 تبلیغات</h2>
+        <p>اینجا محل نمایش تبلیغات محصولات محلی و کشاورزی شماست.</p>
+    </section>
 
-  <footer>
-    <p>© 2025 مای ده</p>
-  </footer>
+    <section id="contact" class="contact">
+        <h2>📞 تماس با ما</h2>
+        <p>واتساپ: <a href="https://wa.me/989332356547">09332356547</a></p>
+        <p>تلفن: 09332356547</p>
+    </section>
 
-  <script src="script.js"></script>
+    <footer>
+        <p>© 2025 مای‌ده | طراحی ساده و سبز برای کشاورزان اهواز</p>
+    </footer>
 </body>
 </html>
