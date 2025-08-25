@@ -32,10 +32,12 @@ footer{text-align:center; padding:1rem; background:#2e7d32; color:#fff;}
 
 <section id="loginSection">
 <h2>🔑 ورود مدیر</h2>
+<form id="loginForm">
 <input type="text" id="username" placeholder="نام کاربری">
 <input type="password" id="password" placeholder="رمز عبور">
-<button id="loginBtn">ورود</button>
+<button type="submit">ورود</button>
 <p id="loginMsg" style="color:red;"></p>
+</form>
 </section>
 
 <section class="articles-container" id="articles" style="display:none;">
@@ -67,6 +69,7 @@ footer{text-align:center; padding:1rem; background:#2e7d32; color:#fff;}
 <h2>📢 تبلیغات</h2>
 <textarea id="adsText">اینجا محل نمایش تبلیغات محصولات محلی و کشاورزی شماست.</textarea>
 <button onclick="updateAds()">به‌روزرسانی تبلیغات</button>
+<div id="adsDisplay"></div>
 </section>
 
 <section id="contact" class="contact">
@@ -83,8 +86,11 @@ footer{text-align:center; padding:1rem; background:#2e7d32; color:#fff;}
 let articles=[];
 const admin={username:'09163153189', password:'Mehdi13721#'};
 
-// اتصال دکمه ورود با addEventListener
-document.getElementById('loginBtn').addEventListener('click', login);
+// اتصال فرم ورود
+document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    login();
+});
 
 function login(){
     const user=document.getElementById('username').value;
@@ -146,10 +152,7 @@ if(text){const div=document.createElement('div'); div.className='comment'; div.t
 
 function updateAds(){
 const text=document.getElementById('adsText').value;
-document.getElementById('adsSection').querySelector('p')?.remove();
-const p=document.createElement('p');
-p.textContent=text;
-document.getElementById('adsSection').appendChild(p);
+document.getElementById('adsDisplay').textContent=text;
 }
 
 function degToDir(deg){
