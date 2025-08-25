@@ -1,175 +1,126 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>مای ده - کشاورزی و هواشناسی</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {font-family: Tahoma, sans-serif; background:#f9fff9; margin:0; padding:0; direction:rtl;}
-    header {background:#2e7d32; color:#fff; padding:15px; text-align:center;}
-    section {padding:15px;}
-    .article {background:#fff; margin:10px 0; padding:10px; border-radius:8px; box-shadow:0 0 5px #ccc;}
-    .comments {margin-top:10px; padding:10px; background:#f0f0f0; border-radius:6px;}
-    .admin-panel {background:#e8f5e9; margin-top:30px; padding:15px; border-top:2px solid #2e7d32;}
-    .hidden {display:none;}
-    button {padding:5px 10px; border:none; border-radius:5px; background:#2e7d32; color:#fff; cursor:pointer;}
-    input, textarea {width:100%; margin:5px 0; padding:5px;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مای‌ده - کشاورزی و هواشناسی</title>
+<style>
+  :root {
+    --bg-color: #f9fff9;
+    --text-color: #333;
+    --card-bg: #fff;
+    --card-shadow: rgba(0,0,0,0.1);
+  }
+  body {
+    font-family: Tahoma, sans-serif;
+    margin:0; padding:0;
+    background: var(--bg-color);
+    color: var(--text-color);
+  }
+  header { background:#2e7d32; color:#fff; padding:15px; text-align:center; }
+  button { padding:5px 10px; margin:5px; border:none; border-radius:5px; background:#2e7d32; color:#fff; cursor:pointer; }
+  section { padding:15px; }
+  .article { background:var(--card-bg); margin:10px 0; padding:10px; border-radius:8px; box-shadow:0 2px 5px var(--card-shadow); cursor:pointer; }
+  .article-content { display:none; margin-top:5px; }
+  #weather, #ads, #contact { margin-top:20px; }
+  #themeBtn { float:left; margin-left:15px; }
+  .ads-box { background:#e8f5e9; padding:10px; border-radius:8px; margin-top:10px; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>مای ده - کشاورزی و هواشناسی</h1>
-  </header>
 
-  <!-- بخش مقالات عمومی -->
-  <section id="articles">
-    <h2>مقالات</h2>
-    <div id="articlesList"></div>
-  </section>
+<header>
+  <h1>🌱 مای‌ده - کشاورزی اهواز</h1>
+  <button id="themeBtn" onclick="toggleTheme()">تغییر تم</button>
+</header>
 
-  <!-- بخش هواشناسی -->
-  <section id="weather">
-    <h2>وضعیت هوا</h2>
-    <input type="text" id="cityInput" placeholder="نام شهر را وارد کنید (فارسی یا انگلیسی)">
-    <button onclick="getWeather()">جستجو</button>
-    <div id="weatherResult"></div>
-  </section>
+<!-- هواشناسی -->
+<section id="weather">
+  <h2>🌤️ وضعیت هوا</h2>
+  <input type="text" id="cityInput" placeholder="نام شهر را وارد کنید (فارسی یا انگلیسی)">
+  <button onclick="getWeather()">جستجو</button>
+  <div id="weatherResult"></div>
+</section>
 
-  <!-- بخش ورود مدیر -->
-  <section class="admin-panel">
-    <h2>ورود مدیر</h2>
-    <div id="loginForm">
-      <input type="text" id="username" placeholder="نام کاربری">
-      <input type="password" id="password" placeholder="رمز عبور">
-      <button onclick="login()">ورود</button>
-    </div>
+<!-- مقالات -->
+<section id="articles">
+  <h2>📚 مقالات</h2>
+  <div class="article">
+    <strong>کشت خیار در اهواز</strong>
+    <div class="article-content">خیار در اوایل برج ۶ کاشته می‌شود و حدود ۴۰ روز بعد برداشت می‌گردد. مناسب برای تابستان اهواز.</div>
+  </div>
+  <div class="article">
+    <strong>گوجه‌فرنگی در اهواز</strong>
+    <div class="article-content">گوجه با روش سنتی جوی و پشته و آبیاری غرقابی کاشته می‌شود. محصول تابستانی با کیفیت خوب.</div>
+  </div>
+  <div class="article">
+    <strong>پیاز در اهواز</strong>
+    <div class="article-content">پیاز در پاییز کاشته و در تابستان برداشت می‌شود. محصول با ارزش و پایدار در اهواز.</div>
+  </div>
+</section>
 
-    <div id="adminArea" class="hidden">
-      <h3>مدیریت مقالات</h3>
-      <input type="text" id="newTitle" placeholder="عنوان مقاله">
-      <textarea id="newContent" placeholder="متن مقاله"></textarea>
-      <button onclick="addArticle()">افزودن مقاله</button>
-      <div id="adminArticles"></div>
-    </div>
-  </section>
+<!-- تبلیغات -->
+<section id="ads">
+  <h2>📢 تبلیغات</h2>
+  <div class="ads-box" id="adsBox">محل نمایش تبلیغات محصولات کشاورزی و محلی شما</div>
+</section>
 
-  <script>
-    // تنظیمات مدیر
-    const admin = { username: "09163153189", password: "Mehdi13721#" };
-    let loggedIn = false;
+<!-- تماس با ما -->
+<section id="contact">
+  <h2>📞 تماس با ما</h2>
+  <p>واتساپ: <a href="https://wa.me/989332356547">09332356547</a></p>
+  <p>تلفن: 09332356547</p>
+</section>
 
-    // مقالات نمونه
-    let articles = JSON.parse(localStorage.getItem("articles")) || [
-      {title:"کشت خیار در اهواز", content:"خیار در اوایل مرداد کاشته می‌شود و حدود 40 روز بعد قابل برداشت است."},
-      {title:"گوجه‌فرنگی در اهواز", content:"گوجه در روش سنتی جوی و پشته با آبیاری غرقابی کشت می‌شود."},
-      {title:"پیاز در اهواز", content:"پیاز در پاییز کاشته می‌شود و در تابستان برداشت می‌گردد."}
-    ];
+<script>
+  // کشویی کردن مقالات
+  document.querySelectorAll('.article strong').forEach(el=>{
+    el.addEventListener('click',()=> {
+      const content = el.nextElementSibling;
+      content.style.display = content.style.display==='none'?'block':'none';
+    });
+  });
 
-    // نمایش مقالات
-    function renderArticles(){
-      const list = document.getElementById("articlesList");
-      list.innerHTML = "";
-      articles.forEach((a,i)=>{
-        let div = document.createElement("div");
-        div.className = "article";
-        div.innerHTML = `<h3>${a.title}</h3><p>${a.content}</p>
-          <div class="comments" id="comments-${i}">
-            <h4>نظرات:</h4>
-            <div id="commentList-${i}"></div>
-            <input type="text" id="commentInput-${i}" placeholder="نظر شما">
-            <button onclick="addComment(${i})">ارسال</button>
-          </div>`;
-        list.appendChild(div);
-      });
-      localStorage.setItem("articles", JSON.stringify(articles));
+  // تغییر تم
+  function toggleTheme(){
+    if(document.body.style.background=='#333'){
+      document.documentElement.style.setProperty('--bg-color','#f9fff9');
+      document.documentElement.style.setProperty('--text-color','#333');
+      document.documentElement.style.setProperty('--card-bg','#fff');
+      document.documentElement.style.setProperty('--card-shadow','rgba(0,0,0,0.1)');
+      document.body.style.background='#f9fff9';
+    } else {
+      document.documentElement.style.setProperty('--bg-color','#333');
+      document.documentElement.style.setProperty('--text-color','#f9fff9');
+      document.documentElement.style.setProperty('--card-bg','#444');
+      document.documentElement.style.setProperty('--card-shadow','rgba(0,0,0,0.3)');
+      document.body.style.background='#333';
     }
+  }
 
-    // افزودن نظر
-    function addComment(index){
-      const input = document.getElementById("commentInput-"+index);
-      const list = document.getElementById("commentList-"+index);
-      if(input.value.trim()!==""){
-        let p = document.createElement("p");
-        p.textContent = input.value;
-        list.appendChild(p);
-        input.value="";
-      }
+  // هواشناسی
+  async function getWeather(){
+    const city = document.getElementById('cityInput').value;
+    if(!city) return;
+    const apiKey='dc9c93f51cdd375d459483c2a9f86d88';
+    const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
+    try{
+      const res = await fetch(url);
+      const data = await res.json();
+      if(data.cod!==200){document.getElementById('weatherResult').innerText='شهر یافت نشد'; return;}
+      const dir = getWindDirection(data.wind.deg);
+      document.getElementById('weatherResult').innerHTML=
+        `🌡 دما: ${data.main.temp}°C<br>💧 رطوبت: ${data.main.humidity}%<br>💨 باد: ${data.wind.speed} m/s (${dir})<br>☁ وضعیت: ${data.weather[0].description}`;
+    }catch(e){
+      document.getElementById('weatherResult').innerText='خطا در دریافت اطلاعات';
     }
+  }
 
-    // ورود مدیر
-    function login(){
-      const u = document.getElementById("username").value;
-      const p = document.getElementById("password").value;
-      if(u===admin.username && p===admin.password){
-        loggedIn=true;
-        document.getElementById("loginForm").classList.add("hidden");
-        document.getElementById("adminArea").classList.remove("hidden");
-        renderAdminArticles();
-      } else {
-        alert("نام کاربری یا رمز اشتباه است");
-      }
-    }
+  function getWindDirection(deg){
+    const dirs=["شمال","شمال‌شرقی","شرق","جنوب‌شرقی","جنوب","جنوب‌غربی","غرب","شمال‌غربی"];
+    return dirs[Math.round(deg/45)%8];
+  }
+</script>
 
-    // افزودن مقاله
-    function addArticle(){
-      const t = document.getElementById("newTitle").value;
-      const c = document.getElementById("newContent").value;
-      if(t && c){
-        articles.push({title:t, content:c});
-        renderArticles();
-        renderAdminArticles();
-        document.getElementById("newTitle").value="";
-        document.getElementById("newContent").value="";
-      }
-    }
-
-    // نمایش مقالات در بخش مدیریت
-    function renderAdminArticles(){
-      const area = document.getElementById("adminArticles");
-      area.innerHTML="";
-      articles.forEach((a,i)=>{
-        let div=document.createElement("div");
-        div.innerHTML = `<b>${a.title}</b> 
-          <button onclick="deleteArticle(${i})">حذف</button>`;
-        area.appendChild(div);
-      });
-    }
-
-    // حذف مقاله
-    function deleteArticle(i){
-      articles.splice(i,1);
-      renderArticles();
-      renderAdminArticles();
-    }
-
-    // هواشناسی
-    async function getWeather(){
-      const city=document.getElementById("cityInput").value;
-      if(!city) return;
-      const apiKey="dc9c93f51cdd375d459483c2a9f86d88";
-      const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
-      try{
-        const res=await fetch(url);
-        const data=await res.json();
-        if(data.cod!==200){document.getElementById("weatherResult").innerText="یافت نشد"; return;}
-        const windDir = getWindDirection(data.wind.deg);
-        document.getElementById("weatherResult").innerHTML=
-          `🌡 دما: ${data.main.temp}°C<br>
-           💧 رطوبت: ${data.main.humidity}%<br>
-           💨 باد: ${data.wind.speed} m/s (${windDir})<br>
-           ☁ وضعیت: ${data.weather[0].description}`;
-      } catch(e){
-        document.getElementById("weatherResult").innerText="خطا در دریافت اطلاعات";
-      }
-    }
-
-    // تبدیل زاویه باد به جهت اسمی
-    function getWindDirection(deg){
-      const dirs=["شمال","شمال‌شرقی","شرق","جنوب‌شرقی","جنوب","جنوب‌غربی","غرب","شمال‌غربی"];
-      return dirs[Math.round(deg/45)%8];
-    }
-
-    renderArticles();
-  </script>
 </body>
 </html>
