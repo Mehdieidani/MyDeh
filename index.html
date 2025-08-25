@@ -1,188 +1,175 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مای‌ده - مدیریت سایت کشاورزی</title>
-<style>
-body { font-family: sans-serif; margin:0; background:#f8fff8; color:#333; }
-header { background:#2e7d32; color:#fff; padding:1rem; text-align:center; }
-nav { background:#388e3c; padding:.5rem; text-align:center; }
-nav a { color:#fff; margin:0 1rem; text-decoration:none; }
-section { margin:2rem; padding:1rem; border-radius:12px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
-.article-card { padding:1rem; border-radius:12px; background:#e8f5e9; margin-bottom:1rem; cursor:pointer; }
-.article-content { display:none; margin-top:.5rem; }
-button { padding:.5rem 1rem; margin:.2rem; border:none; border-radius:6px; cursor:pointer; }
-.edit-btn{background:#1976d2; color:#fff;}
-.delete-btn{background:#d32f2f; color:#fff;}
-input, textarea{width:100%; margin:.5rem 0; padding:.5rem; border-radius:6px; border:1px solid #ccc;}
-footer{text-align:center; padding:1rem; background:#2e7d32; color:#fff;}
-#loginSection{max-width:400px; margin:auto;}
-</style>
+  <meta charset="UTF-8">
+  <title>مای ده - کشاورزی و هواشناسی</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {font-family: Tahoma, sans-serif; background:#f9fff9; margin:0; padding:0; direction:rtl;}
+    header {background:#2e7d32; color:#fff; padding:15px; text-align:center;}
+    section {padding:15px;}
+    .article {background:#fff; margin:10px 0; padding:10px; border-radius:8px; box-shadow:0 0 5px #ccc;}
+    .comments {margin-top:10px; padding:10px; background:#f0f0f0; border-radius:6px;}
+    .admin-panel {background:#e8f5e9; margin-top:30px; padding:15px; border-top:2px solid #2e7d32;}
+    .hidden {display:none;}
+    button {padding:5px 10px; border:none; border-radius:5px; background:#2e7d32; color:#fff; cursor:pointer;}
+    input, textarea {width:100%; margin:5px 0; padding:5px;}
+  </style>
 </head>
 <body>
-<header>
-<h1>🌱 مای‌ده - سایت کشاورزی اهواز</h1>
-</header>
-<nav>
-<a href="#articles">مقالات</a>
-<a href="#weather">هواشناسی</a>
-<a href="#contact">تماس با ما</a>
-</nav>
+  <header>
+    <h1>مای ده - کشاورزی و هواشناسی</h1>
+  </header>
 
-<section id="loginSection">
-<h2>🔑 ورود مدیر</h2>
-<form id="loginForm">
-<input type="text" id="username" placeholder="نام کاربری">
-<input type="password" id="password" placeholder="رمز عبور">
-<button type="submit">ورود</button>
-<p id="loginMsg" style="color:red;"></p>
-</form>
-</section>
+  <!-- بخش مقالات عمومی -->
+  <section id="articles">
+    <h2>مقالات</h2>
+    <div id="articlesList"></div>
+  </section>
 
-<section class="articles-container" id="articles" style="display:none;">
-<h2 style="text-align:center; margin:1rem;">📚 مقالات کشاورزی</h2>
-</section>
+  <!-- بخش هواشناسی -->
+  <section id="weather">
+    <h2>وضعیت هوا</h2>
+    <input type="text" id="cityInput" placeholder="نام شهر را وارد کنید (فارسی یا انگلیسی)">
+    <button onclick="getWeather()">جستجو</button>
+    <div id="weatherResult"></div>
+  </section>
 
-<section class="add-article" id="addArticleSection" style="display:none;">
-<h2>➕ افزودن مقاله جدید</h2>
-<input type="text" id="articleTitle" placeholder="عنوان مقاله">
-<textarea id="articleContent" placeholder="متن مقاله"></textarea>
-<button onclick="addArticle()">افزودن</button>
-</section>
+  <!-- بخش ورود مدیر -->
+  <section class="admin-panel">
+    <h2>ورود مدیر</h2>
+    <div id="loginForm">
+      <input type="text" id="username" placeholder="نام کاربری">
+      <input type="password" id="password" placeholder="رمز عبور">
+      <button onclick="login()">ورود</button>
+    </div>
 
-<section class="comments" id="commentsSection" style="display:none;">
-<h2>💬 نظرات</h2>
-<input type="text" id="commentInput" placeholder="نظر خود را بنویسید...">
-<button onclick="addComment()">ارسال نظر</button>
-<div id="commentList"></div>
-</section>
+    <div id="adminArea" class="hidden">
+      <h3>مدیریت مقالات</h3>
+      <input type="text" id="newTitle" placeholder="عنوان مقاله">
+      <textarea id="newContent" placeholder="متن مقاله"></textarea>
+      <button onclick="addArticle()">افزودن مقاله</button>
+      <div id="adminArticles"></div>
+    </div>
+  </section>
 
-<section id="weather" class="weather">
-<h2>🌤️ وضعیت هوا</h2>
-<input type="text" id="cityInput" placeholder="نام شهر (فارسی یا انگلیسی)">
-<button onclick="getWeather()">جستجو</button>
-<div id="weatherResult"></div>
-</section>
+  <script>
+    // تنظیمات مدیر
+    const admin = { username: "09163153189", password: "Mehdi13721#" };
+    let loggedIn = false;
 
-<section class="ads" id="adsSection" style="display:none;">
-<h2>📢 تبلیغات</h2>
-<textarea id="adsText">اینجا محل نمایش تبلیغات محصولات محلی و کشاورزی شماست.</textarea>
-<button onclick="updateAds()">به‌روزرسانی تبلیغات</button>
-<div id="adsDisplay"></div>
-</section>
+    // مقالات نمونه
+    let articles = JSON.parse(localStorage.getItem("articles")) || [
+      {title:"کشت خیار در اهواز", content:"خیار در اوایل مرداد کاشته می‌شود و حدود 40 روز بعد قابل برداشت است."},
+      {title:"گوجه‌فرنگی در اهواز", content:"گوجه در روش سنتی جوی و پشته با آبیاری غرقابی کشت می‌شود."},
+      {title:"پیاز در اهواز", content:"پیاز در پاییز کاشته می‌شود و در تابستان برداشت می‌گردد."}
+    ];
 
-<section id="contact" class="contact">
-<h2>📞 تماس با ما</h2>
-<p>واتساپ: <a href="https://wa.me/989332356547">09332356547</a></p>
-<p>تلفن: 09332356547</p>
-</section>
-
-<footer>
-<p>© 2025 مای‌ده | طراحی ساده و سبز برای کشاورزان اهواز</p>
-</footer>
-
-<script>
-let articles=[];
-const admin={username:'09163153189', password:'Mehdi13721#'};
-
-// اتصال فرم ورود
-document.getElementById('loginForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    login();
-});
-
-function login(){
-    const user=document.getElementById('username').value;
-    const pass=document.getElementById('password').value;
-    const msg=document.getElementById('loginMsg');
-    if(user===admin.username && pass===admin.password){
-        document.getElementById('loginSection').style.display='none';
-        document.getElementById('articles').style.display='block';
-        document.getElementById('addArticleSection').style.display='block';
-        document.getElementById('commentsSection').style.display='block';
-        document.getElementById('adsSection').style.display='block';
-        loadArticles();
-    } else { 
-        msg.textContent='نام کاربری یا رمز عبور اشتباه است'; 
+    // نمایش مقالات
+    function renderArticles(){
+      const list = document.getElementById("articlesList");
+      list.innerHTML = "";
+      articles.forEach((a,i)=>{
+        let div = document.createElement("div");
+        div.className = "article";
+        div.innerHTML = `<h3>${a.title}</h3><p>${a.content}</p>
+          <div class="comments" id="comments-${i}">
+            <h4>نظرات:</h4>
+            <div id="commentList-${i}"></div>
+            <input type="text" id="commentInput-${i}" placeholder="نظر شما">
+            <button onclick="addComment(${i})">ارسال</button>
+          </div>`;
+        list.appendChild(div);
+      });
+      localStorage.setItem("articles", JSON.stringify(articles));
     }
-}
 
-function saveArticles(){ localStorage.setItem('articles', JSON.stringify(articles)); renderArticles(); }
-function loadArticles(){ const saved=localStorage.getItem('articles'); if(saved){articles=JSON.parse(saved);} renderArticles(); }
-function renderArticles(){
-const container=document.getElementById('articles');
-container.innerHTML='<h2 style="text-align:center; margin:1rem;">📚 مقالات کشاورزی</h2>';
-articles.forEach((a,index)=>{
-const card=document.createElement('div');
-card.className='article-card';
-card.innerHTML=`<strong>${a.title}</strong>
-<div class='article-content'>${a.content}</div>
-<button class='edit-btn' onclick='editArticle(${index})'>ویرایش</button>
-<button class='delete-btn' onclick='deleteArticle(${index})'>حذف</button>`;
-card.querySelector('strong').onclick=function(){
-const contentDiv=card.querySelector('.article-content');
-contentDiv.style.display=contentDiv.style.display==='none'?'block':'none';
-};
-container.appendChild(card);
-});
-}
+    // افزودن نظر
+    function addComment(index){
+      const input = document.getElementById("commentInput-"+index);
+      const list = document.getElementById("commentList-"+index);
+      if(input.value.trim()!==""){
+        let p = document.createElement("p");
+        p.textContent = input.value;
+        list.appendChild(p);
+        input.value="";
+      }
+    }
 
-function addArticle(){
-const title=document.getElementById('articleTitle').value;
-const content=document.getElementById('articleContent').value;
-if(title && content){articles.push({title, content}); document.getElementById('articleTitle').value=''; document.getElementById('articleContent').value=''; saveArticles();}
-}
+    // ورود مدیر
+    function login(){
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+      if(u===admin.username && p===admin.password){
+        loggedIn=true;
+        document.getElementById("loginForm").classList.add("hidden");
+        document.getElementById("adminArea").classList.remove("hidden");
+        renderAdminArticles();
+      } else {
+        alert("نام کاربری یا رمز اشتباه است");
+      }
+    }
 
-function editArticle(index){
-const newTitle=prompt('عنوان جدید:', articles[index].title);
-const newContent=prompt('متن جدید:', articles[index].content);
-if(newTitle && newContent){articles[index]={title:newTitle,content:newContent}; saveArticles();}
-}
+    // افزودن مقاله
+    function addArticle(){
+      const t = document.getElementById("newTitle").value;
+      const c = document.getElementById("newContent").value;
+      if(t && c){
+        articles.push({title:t, content:c});
+        renderArticles();
+        renderAdminArticles();
+        document.getElementById("newTitle").value="";
+        document.getElementById("newContent").value="";
+      }
+    }
 
-function deleteArticle(index){
-if(confirm('آیا مطمئن هستید می‌خواهید حذف کنید؟')){articles.splice(index,1); saveArticles();}
-}
+    // نمایش مقالات در بخش مدیریت
+    function renderAdminArticles(){
+      const area = document.getElementById("adminArticles");
+      area.innerHTML="";
+      articles.forEach((a,i)=>{
+        let div=document.createElement("div");
+        div.innerHTML = `<b>${a.title}</b> 
+          <button onclick="deleteArticle(${i})">حذف</button>`;
+        area.appendChild(div);
+      });
+    }
 
-function addComment(){
-const input=document.getElementById('commentInput');
-const text=input.value;
-if(text){const div=document.createElement('div'); div.className='comment'; div.textContent=text; document.getElementById('commentList').appendChild(div); input.value='';}
-}
+    // حذف مقاله
+    function deleteArticle(i){
+      articles.splice(i,1);
+      renderArticles();
+      renderAdminArticles();
+    }
 
-function updateAds(){
-const text=document.getElementById('adsText').value;
-document.getElementById('adsDisplay').textContent=text;
-}
+    // هواشناسی
+    async function getWeather(){
+      const city=document.getElementById("cityInput").value;
+      if(!city) return;
+      const apiKey="dc9c93f51cdd375d459483c2a9f86d88";
+      const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
+      try{
+        const res=await fetch(url);
+        const data=await res.json();
+        if(data.cod!==200){document.getElementById("weatherResult").innerText="یافت نشد"; return;}
+        const windDir = getWindDirection(data.wind.deg);
+        document.getElementById("weatherResult").innerHTML=
+          `🌡 دما: ${data.main.temp}°C<br>
+           💧 رطوبت: ${data.main.humidity}%<br>
+           💨 باد: ${data.wind.speed} m/s (${windDir})<br>
+           ☁ وضعیت: ${data.weather[0].description}`;
+      } catch(e){
+        document.getElementById("weatherResult").innerText="خطا در دریافت اطلاعات";
+      }
+    }
 
-function degToDir(deg){
-if(deg>=337.5||deg<22.5) return 'شمال';
-if(deg>=22.5&&deg<67.5) return 'شمال‌شرقی';
-if(deg>=67.5&&deg<112.5) return 'شرق';
-if(deg>=112.5&&deg<157.5) return 'جنوب‌شرقی';
-if(deg>=157.5&&deg<202.5) return 'جنوب';
-if(deg>=202.5&&deg<247.5) return 'جنوب‌غربی';
-if(deg>=247.5&&deg<292.5) return 'غرب';
-if(deg>=292.5&&deg<337.5) return 'شمال‌غربی';
-}
+    // تبدیل زاویه باد به جهت اسمی
+    function getWindDirection(deg){
+      const dirs=["شمال","شمال‌شرقی","شرق","جنوب‌شرقی","جنوب","جنوب‌غربی","غرب","شمال‌غربی"];
+      return dirs[Math.round(deg/45)%8];
+    }
 
-async function getWeather(){
-const city=document.getElementById('cityInput').value;
-if(!city) return;
-const apiKey='dc9c93f51cdd375d459483c2a9f86d88';
-const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
-const res=await fetch(url);
-const data=await res.json();
-if(data.cod!==200){document.getElementById('weatherResult').innerHTML='<p>شهر یافت نشد.</p>'; return;}
-const dir=degToDir(data.wind.deg);
-document.getElementById('weatherResult').innerHTML=`
-<p>شهر: ${data.name}</p>
-<p>دمـا: ${data.main.temp}°C</p>
-<p>رطوبت: ${data.main.humidity}%</p>
-<p>باد: ${data.wind.speed} km/h (${dir})</p>
-<p>آسمان: ${data.weather[0].description}</p>
-`;
-}
-</script>
+    renderArticles();
+  </script>
 </body>
 </html>
