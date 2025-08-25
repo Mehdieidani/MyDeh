@@ -4,27 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مای‌ده - کشاورزی و هواشناسی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg-color: #f9fff9;
     --text-color: #333;
     --card-bg: #fff;
     --card-shadow: rgba(0,0,0,0.1);
+    --main-color: #2e7d32;
   }
   body {
-    font-family: Tahoma, sans-serif;
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
     margin:0; padding:0;
     background: var(--bg-color);
     color: var(--text-color);
   }
-  header { background:#2e7d32; color:#fff; padding:15px; text-align:center; }
-  button { padding:5px 10px; margin:5px; border:none; border-radius:5px; background:#2e7d32; color:#fff; cursor:pointer; }
+  header { background:var(--main-color); color:#fff; padding:15px; text-align:center; }
+  button { padding:7px 12px; margin:5px; border:none; border-radius:8px; background:var(--main-color); color:#fff; cursor:pointer; }
   section { padding:15px; }
-  .article { background:var(--card-bg); margin:10px 0; padding:10px; border-radius:8px; box-shadow:0 2px 5px var(--card-shadow); cursor:pointer; }
+  .article { background:var(--card-bg); margin:10px 0; padding:10px; border-radius:8px; box-shadow:0 2px 5px var(--card-shadow); cursor:pointer; position:relative; }
   .article-content { display:none; margin-top:5px; }
-  #weather, #ads, #contact { margin-top:20px; }
+  .star { position:absolute; left:10px; top:10px; cursor:pointer; font-size:18px; color:gray; }
+  .star.active { color:gold; }
+  #weather, #ads, #contact, #products { margin-top:20px; }
   #themeBtn { float:left; margin-left:15px; }
-  .ads-box { background:#e8f5e9; padding:10px; border-radius:8px; margin-top:10px; }
+  .ads-box, .product-card { background:#e8f5e9; padding:10px; border-radius:8px; margin-top:10px; box-shadow:0 2px 5px var(--card-shadow); }
+  .product-card img { width:100%; border-radius:8px; margin-bottom:5px; }
 </style>
 </head>
 <body>
@@ -39,6 +44,7 @@
   <h2>🌤️ وضعیت هوا</h2>
   <input type="text" id="cityInput" placeholder="نام شهر را وارد کنید (فارسی یا انگلیسی)">
   <button onclick="getWeather()">جستجو</button>
+  <button onclick="getLocationWeather()">📍 موقعیت من</button>
   <div id="weatherResult"></div>
 </section>
 
@@ -46,16 +52,29 @@
 <section id="articles">
   <h2>📚 مقالات</h2>
   <div class="article">
+    <span class="star">☆</span>
     <strong>کشت خیار در اهواز</strong>
     <div class="article-content">خیار در اوایل برج ۶ کاشته می‌شود و حدود ۴۰ روز بعد برداشت می‌گردد. مناسب برای تابستان اهواز.</div>
   </div>
   <div class="article">
+    <span class="star">☆</span>
     <strong>گوجه‌فرنگی در اهواز</strong>
     <div class="article-content">گوجه با روش سنتی جوی و پشته و آبیاری غرقابی کاشته می‌شود. محصول تابستانی با کیفیت خوب.</div>
   </div>
   <div class="article">
+    <span class="star">☆</span>
     <strong>پیاز در اهواز</strong>
     <div class="article-content">پیاز در پاییز کاشته و در تابستان برداشت می‌شود. محصول با ارزش و پایدار در اهواز.</div>
+  </div>
+</section>
+
+<!-- محصولات -->
+<section id="products">
+  <h2>🛒 محصولات کشاورزی</h2>
+  <div class="product-card">
+    <img src="https://via.placeholder.com/400x200?text=%D8%AE%DB%8C%D8%A7%D8%B1+%D8%A7%D9%87%D9%88%D8%A7%D8%B2" alt="خیار اهواز">
+    <strong>خیار تازه اهواز</strong>
+    <p>محصول تابستانی، برداشت مستقیم از مزرعه. خرید حضوری.</p>
   </div>
 </section>
 
@@ -77,7 +96,15 @@
   document.querySelectorAll('.article strong').forEach(el=>{
     el.addEventListener('click',()=> {
       const content = el.nextElementSibling;
-      content.style.display = content.style.display==='none'?'block':'none';
+      content.style.display = content.style.display==='block'?'none':'block';
+    });
+  });
+
+  // علاقه‌مندی (ستاره)
+  document.querySelectorAll('.star').forEach(star=>{
+    star.addEventListener('click',()=>{
+      star.classList.toggle('active');
+      star.textContent = star.classList.contains('active') ? '★' : '☆';
     });
   });
 
@@ -99,8 +126,8 @@
   }
 
   // هواشناسی
-  async function getWeather(){
-    const city = document.getElementById('cityInput').value;
+  async function getWeather(cityName){
+    const city = cityName || document.getElementById('cityInput').value;
     if(!city) return;
     const apiKey='dc9c93f51cdd375d459483c2a9f86d88';
     const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
@@ -109,10 +136,44 @@
       const data = await res.json();
       if(data.cod!==200){document.getElementById('weatherResult').innerText='شهر یافت نشد'; return;}
       const dir = getWindDirection(data.wind.deg);
+      const icon = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
       document.getElementById('weatherResult').innerHTML=
-        `🌡 دما: ${data.main.temp}°C<br>💧 رطوبت: ${data.main.humidity}%<br>💨 باد: ${data.wind.speed} m/s (${dir})<br>☁ وضعیت: ${data.weather[0].description}`;
+        `<img src="${icon}" alt="وضعیت هوا"><br>
+        🌡 دما: ${data.main.temp}°C<br>
+        💧 رطوبت: ${data.main.humidity}%<br>
+        💨 باد: ${data.wind.speed} m/s (${dir})<br>
+        ☁ وضعیت: ${data.weather[0].description}`;
     }catch(e){
       document.getElementById('weatherResult').innerText='خطا در دریافت اطلاعات';
+    }
+  }
+
+  // هواشناسی با GPS
+  function getLocationWeather(){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(async pos=>{
+        const lat=pos.coords.latitude;
+        const lon=pos.coords.longitude;
+        const apiKey='dc9c93f51cdd375d459483c2a9f86d88';
+        const url=`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=fa`;
+        try{
+          const res = await fetch(url);
+          const data = await res.json();
+          if(data.cod!==200){document.getElementById('weatherResult').innerText='موقعیت یافت نشد'; return;}
+          const dir = getWindDirection(data.wind.deg);
+          const icon = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+          document.getElementById('weatherResult').innerHTML=
+            `<img src="${icon}" alt="وضعیت هوا"><br>
+            🌡 دما: ${data.main.temp}°C<br>
+            💧 رطوبت: ${data.main.humidity}%<br>
+            💨 باد: ${data.wind.speed} m/s (${dir})<br>
+            ☁ وضعیت: ${data.weather[0].description}`;
+        }catch(e){
+          document.getElementById('weatherResult').innerText='خطا در دریافت اطلاعات';
+        }
+      });
+    }else{
+      document.getElementById('weatherResult').innerText="GPS در مرورگر شما فعال نیست";
     }
   }
 
