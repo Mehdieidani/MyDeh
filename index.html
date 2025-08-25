@@ -38,29 +38,13 @@
         }
         .slides {
             display: flex;
-            width: 300%;
-            animation: slide 15s infinite;
+            transition: margin-right 0.5s;
         }
         .slide {
-            width: 100%;
-            padding: 2rem;
-        }
-        @keyframes slide {
-            0% {margin-right: 0;}
-            30% {margin-right: 0;}
-            35% {margin-right: -100%;}
-            65% {margin-right: -100%;}
-            70% {margin-right: -200%;}
-            100% {margin-right: -200%;}
-        }
-        .weather {
-            margin: 2rem;
+            min-width: 100%;
             padding: 1rem;
-            border-radius: 12px;
-            background: #e8f5e9;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-        .ads, .contact {
+        .weather, .ads, .contact, .add-article, .comments {
             margin: 2rem;
             padding: 1rem;
             border-radius: 12px;
@@ -72,6 +56,23 @@
             padding: 1rem;
             background: #2e7d32;
             color: #fff;
+        }
+        input, textarea, button {
+            display: block;
+            width: 100%;
+            margin: .5rem 0;
+            padding: .5rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            background: #388e3c;
+            color: #fff;
+            cursor: pointer;
+        }
+        .comment {
+            padding: .5rem;
+            border-bottom: 1px solid #eee;
         }
     </style>
 </head>
@@ -87,8 +88,8 @@
 
     <section id="articles">
         <h2 style="text-align:center; margin:1rem;">📚 مقالات کشاورزی</h2>
-        <div class="slider">
-            <div class="slides">
+        <div class="slider" id="articleSlider">
+            <div class="slides" id="slides">
                 <div class="slide">
                     <h3>کاشت و فواید خیار در اهواز</h3>
                     <p>خیار در اقلیم گرم اهواز در فصل تابستان، اوایل شهریور کاشته می‌شود و حدود ۴۰ روز بعد آماده برداشت است. این محصول نیاز به آبیاری منظم دارد. خیار منبع عالی آب و فیبر بوده و به خنک‌کردن بدن در تابستان کمک می‌کند و برای پوست بسیار مفید است.</p>
@@ -105,12 +106,25 @@
         </div>
     </section>
 
+    <section class="add-article">
+        <h2>➕ افزودن مقاله جدید</h2>
+        <input type="text" id="articleTitle" placeholder="عنوان مقاله">
+        <textarea id="articleContent" placeholder="متن مقاله"></textarea>
+        <button onclick="addArticle()">افزودن</button>
+    </section>
+
+    <section class="comments">
+        <h2>💬 نظرات</h2>
+        <input type="text" id="commentInput" placeholder="نظر خود را بنویسید...">
+        <button onclick="addComment()">ارسال نظر</button>
+        <div id="commentList"></div>
+    </section>
+
     <section id="weather" class="weather">
-        <h2>🌤️ وضعیت هوا در اهواز</h2>
-        <p>دمـا: ۴۲°C</p>
-        <p>رطوبت: ۳۲٪</p>
-        <p>سرعت باد: ۱۸ km/h جهت شمال‌غربی</p>
-        <p>آسمان: نیمه‌ابری</p>
+        <h2>🌤️ وضعیت هوا</h2>
+        <input type="text" id="cityInput" placeholder="نام شهر (فارسی یا انگلیسی)">
+        <button onclick="getWeather()">جستجو</button>
+        <div id="weatherResult"></div>
     </section>
 
     <section class="ads">
@@ -127,5 +141,77 @@
     <footer>
         <p>© 2025 مای‌ده | طراحی ساده و سبز برای کشاورزان اهواز</p>
     </footer>
+
+    <script>
+        // ذخیره و افزودن مقاله جدید
+        function addArticle(){
+            const title = document.getElementById('articleTitle').value;
+            const content = document.getElementById('articleContent').value;
+            if(title && content){
+                const slides = document.getElementById('slides');
+                const div = document.createElement('div');
+                div.className = 'slide';
+                div.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
+                slides.appendChild(div);
+                localStorage.setItem('articles', slides.innerHTML);
+                document.getElementById('articleTitle').value = '';
+                document.getElementById('articleContent').value = '';
+            }
+        }
+        // بارگذاری مقالات ذخیره‌شده
+        window.onload = function(){
+            const saved = localStorage.getItem('articles');
+            if(saved){
+                document.getElementById('slides').innerHTML = saved;
+            }
+        }
+
+        // نظرات
+        function addComment(){
+            const input = document.getElementById('commentInput');
+            const text = input.value;
+            if(text){
+                const div = document.createElement('div');
+                div.className = 'comment';
+                div.textContent = text;
+                document.getElementById('commentList').appendChild(div);
+                input.value = '';
+            }
+        }
+
+        // تبدیل جهت باد به نام فارسی
+        function degToDir(deg){
+            if (deg>=337.5 || deg<22.5) return 'شمال';
+            if (deg>=22.5 && deg<67.5) return 'شمال‌شرقی';
+            if (deg>=67.5 && deg<112.5) return 'شرق';
+            if (deg>=112.5 && deg<157.5) return 'جنوب‌شرقی';
+            if (deg>=157.5 && deg<202.5) return 'جنوب';
+            if (deg>=202.5 && deg<247.5) return 'جنوب‌غربی';
+            if (deg>=247.5 && deg<292.5) return 'غرب';
+            if (deg>=292.5 && deg<337.5) return 'شمال‌غربی';
+        }
+
+        // هواشناسی با OpenWeatherMap
+        async function getWeather(){
+            const city = document.getElementById('cityInput').value;
+            if(!city) return;
+            const apiKey = 'dc9c93f51cdd375d459483c2a9f86d88';
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fa`;
+            const res = await fetch(url);
+            const data = await res.json();
+            if(data.cod !== 200){
+                document.getElementById('weatherResult').innerHTML = '<p>شهر یافت نشد.</p>';
+                return;
+            }
+            const dir = degToDir(data.wind.deg);
+            document.getElementById('weatherResult').innerHTML = `
+                <p>شهر: ${data.name}</p>
+                <p>دمـا: ${data.main.temp}°C</p>
+                <p>رطوبت: ${data.main.humidity}%</p>
+                <p>باد: ${data.wind.speed} km/h (${dir})</p>
+                <p>آسمان: ${data.weather[0].description}</p>
+            `;
+        }
+    </script>
 </body>
 </html>
