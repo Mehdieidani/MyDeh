@@ -27,7 +27,7 @@ header{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,var(--
 .select{appearance:none;outline:none;}
 .ticker{margin-top:8px;background:#ffffff22;border-radius:12px;padding:8px 12px;overflow:hidden;position:relative;font-size:14px;}
 .ticker .slide{white-space:nowrap;display:inline-block;animation:marquee 15s linear infinite;}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}} 
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 
 .sidebar-toggle{position:fixed;top:50%;inset-inline-end:10px;transform:translateY(-50%);z-index:20;}
 .fab{width:48px;height:48px;border-radius:14px;border:none;cursor:pointer;background:var(--primary);color:#fff;font-size:20px;box-shadow:var(--shadow);}
@@ -209,92 +209,108 @@ $('#closeSidebar').onclick=()=>$('#sidebar').classList.remove('open');
 
 // ساعت اهواز
 function updateClock(){
-  const tz = new Date().toLocaleString("fa-IR",{timeZone:"Asia/Tehran"});
-  const timeStr = new Date(tz).toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
-  $('#clockAhvaz').innerText=timeStr;
+  const timeStr = new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Tehran'});
+  $('#clockAhvaz').innerText = timeStr;
 }
-setInterval(updateClock,60000); updateClock();
+setInterval(updateClock,1000);
+updateClock();
 
-// تم‌ها
-$('#themeSelect').onchange=e=>{
-  document.body.className=e.target.value;
-}
+// تغییر تم
+$('#themeSelect').onchange=e=>document.body.className = e.target.value || 'theme-green';
 
-// بازگشت به بالا
-window.onscroll=()=>$('#toTop').classList.toggle('show',window.scrollY>300);
+// به بالا
+window.onscroll=()=>{$('#toTop').classList.toggle('show',window.scrollY>300);}
 $('#toTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
 
-// مقالات - علاقه‌مندی
+// Carousel
+$$('.carousel').forEach(car=>{
+  const slides = car.querySelector('.slides');
+  const imgs = slides.children;
+  let idx = 0;
+  car.querySelector('.car-prev').onclick = ()=>{
+    idx = (idx-1+imgs.length)%imgs.length;
+    slides.style.transform = `translateX(-${idx*100}%)`;
+  };
+  car.querySelector('.car-next').onclick = ()=>{
+    idx = (idx+1)%imgs.length;
+    slides.style.transform = `translateX(-${idx*100}%)`;
+  };
+});
+
+// علاقه‌مندی‌ها
+const favsKey='mydehFavs';
+let favs = JSON.parse(localStorage.getItem(favsKey)||'[]');
+function updateFavUI(){
+  const ul = $('#favList'); ul.innerHTML='';
+  if(!favs.length){ul.innerHTML='<li>هنوز چیزی ستاره‌دار نشده</li>';return;}
+  favs.forEach(f=>{const li=document.createElement('li');li.innerText=f;ul.appendChild(li);});
+}
+updateFavUI();
 $$('.article').forEach(a=>{
   const star=a.querySelector('.star');
+  const id=a.dataset.id;
+  if(favs.includes(id)) star.classList.add('active');
   star.onclick=()=>{
-    star.classList.toggle('active');
-    const favList=$('#favList');
-    const id=a.dataset.id;
-    const title=a.querySelector('h3').innerText;
-    if(star.classList.contains('active')){
-      const li=document.createElement('li');li.textContent=title;li.dataset.id=id;favList.appendChild(li);
-      if(favList.children[0] && favList.children[0].textContent.includes('هنوز')) favList.children[0].remove();
-    }else{
-      const li=favList.querySelector(`li[data-id="${id}"]`);if(li) li.remove();
-      if(favList.children.length===0){const li=document.createElement('li');li.textContent='هنوز چیزی ستاره‌دار نشده';favList.appendChild(li);}
-    }
-  }
+    if(favs.includes(id)){
+      favs=favs.filter(x=>x!==id); star.classList.remove('active');
+    }else{favs.push(id); star.classList.add('active');}
+    localStorage.setItem(favsKey,JSON.stringify(favs));
+    updateFavUI();
+  };
   a.querySelector('h3').onclick=()=>a.classList.toggle('open');
 });
 
 // جستجو
 $('#searchBtn').onclick=()=>{
-  const query=$('#searchInput').value.toLowerCase();
-  $$('#articleGrid .article,#productGrid .product').forEach(el=>{
-    const txt=(el.innerText||'').toLowerCase();
-    el.style.display=txt.includes(query)?'block':'none';
+  const q=$('#searchInput').value.toLowerCase();
+  $$('#articleGrid .article').forEach(a=>{
+    a.style.display=a.innerText.toLowerCase().includes(q)?'block':'none';
   });
-}
+  $$('#productGrid .product').forEach(p=>{
+    p.style.display=p.dataset.title.toLowerCase().includes(q)?'block':'none';
+  });
+};
 $('#clearSearch').onclick=()=>{
   $('#searchInput').value='';
-  $$('#articleGrid .article,#productGrid .product').forEach(el=>el.style.display='block');
-}
+  $$('#articleGrid .article, #productGrid .product').forEach(el=>el.style.display='block');
+};
 
-// تبلیغات و اطلاعیه نمونه
-['هشدار: بارش شدید تابستانی','اطلاع: ثبت سفارش جدید محصولات'].forEach(msg=>{
-  const li=document.createElement('li');li.textContent=msg;$('#alertList').appendChild(li);
-});
-
-// تقویم کشاورزی نمونه
-function updateDateInfo(){
-  const d=new Date();$('#todayDate').innerText=d.toLocaleDateString('fa-IR');
-  $('#seasonTip').innerText='فصل مناسب کاشت خیار';
-  $('#pageViews').innerText='بازدید: '+Math.floor(Math.random()*300+50);
-}
-updateDateInfo();
-
-// Carousel محصولات
-$$('.carousel').forEach(car=>{
-  const slides=car.querySelector('.slides');
-  const imgs=slides.querySelectorAll('img');
-  let idx=0;
-  car.querySelector('.car-next').onclick=()=>{idx=(idx+1)%imgs.length;slides.style.transform=`translateX(-${idx*100}%)`;}
-  car.querySelector('.car-prev').onclick=()=>{idx=(idx-1+imgs.length)%imgs.length;slides.style.transform=`translateX(-${idx*100}%)`;}
-});
-
-// هواشناسی (نمونه با API آزاد)
+// هواشناسی
+const WEATHER_KEY='dc9c93f51cdd375d459483c2a9f86d88';
 async function getWeather(city){
-  const key='demo'; // کلید واقعی API خود را جایگزین کنید
-  try{
-    const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric&lang=fa`);
-    const data=await res.json();
-    if(data.main){
-      $('#weatherResult').style.display='flex';
-      $('#weatherResult').innerHTML=`<div><strong>${data.name}</strong><br>🌡️ ${data.main.temp}°C | ${data.weather[0].description}</div>`;
-    }else throw new Error();
-  }catch(e){
-    $('#weatherResult').style.display='flex';
-    $('#weatherResult').innerText='شهر یافت نشد';
+  const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_KEY}&units=metric&lang=fa`);
+  const data=await res.json();
+  showWeather(data);
+}
+async function getWeatherCoords(lat,lon){
+  const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_KEY}&units=metric&lang=fa`);
+  const data=await res.json();
+  showWeather(data);
+}
+function showWeather(data){
+  const w=$('#weatherResult');
+  if(data.main){
+    w.style.display='flex';
+    w.innerHTML=`<div><strong>${data.name}</strong><br>🌡️ ${data.main.temp}°C | ${data.weather[0].description}</div>`;
+  }else{
+    w.style.display='flex';
+    w.innerText='شهر یافت نشد';
   }
 }
 $('#btnSearchWeather').onclick=()=>getWeather($('#cityInput').value);
-$('#btnMyLocation').onclick=()=>{
-  navigator.geolocation.getCurrentPosition(pos=>getWeather(`${pos.coords.latitude},${pos.coords.longitude}`));
-}
+$('#btnMyLocation').onclick=()=>navigator.geolocation.getCurrentPosition(p=>getWeatherCoords(p.coords.latitude,p.coords.longitude));
+
+// اطلاعیه‌ها نمونه
+const newsList=$('#newsList');
+['برداشت خیار آغاز شد','کود کامل برای گوجه‌فرنگی موجود است','آب‌یاری اضطراری در روستای فلان'].forEach(n=>{
+  const li=document.createElement('li'); li.innerText=n; newsList.appendChild(li);
+});
+// هشدارها نمونه
+const alertList=$('#alertList');
+['هشدار گرمای شدید امروز','احتمال بارش در نیمه‌شب'].forEach(a=>{
+  const li=document.createElement('li'); li.innerText=a; alertList.appendChild(li);
+});
 </script>
+
+</body>
+</html>
