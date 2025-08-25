@@ -16,6 +16,7 @@
 .theme-brown{--bg:#f9f6f2;--text:#2e241a;--card:#fff;--muted:#efe7de;--primary:#7a5230;--shadow:0 6px 18px rgba(122,82,48,0.18);--border:#e1d5c8;}
 
 html,body{height:100%;margin:0;font-family:'Vazirmatn',sans-serif;line-height:1.75;background:var(--bg);color:var(--text);}
+body{overflow-x:hidden;}
 a{color:var(--primary);text-decoration:none;}
 img{max-width:100%;display:block;}
 header{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,var(--primary),#1b4b1d);color:#fff;padding:12px 16px 8px;box-shadow:var(--shadow);}
@@ -31,7 +32,13 @@ header{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,var(--
 
 .sidebar-toggle{position:fixed;top:50%;inset-inline-end:10px;transform:translateY(-50%);z-index:20;}
 .fab{width:48px;height:48px;border-radius:14px;border:none;cursor:pointer;background:var(--primary);color:#fff;font-size:20px;box-shadow:var(--shadow);}
-.sidebar{position:fixed;top:0;inset-inline-end:0;height:100%;width:320px;max-width:92%;background:var(--card);color:var(--text);box-shadow:-8px 0 24px rgba(0,0,0,0.12);transform:translateX(100%);transition:transform .35s ease;z-index:30;display:flex;flex-direction:column;border-inline-start:1px solid var(--border);}
+.sidebar{
+  position:fixed;top:0;right:0;inset-inline-end:0;height:100%;width:320px;max-width:92%;
+  background:var(--card);color:var(--text);box-shadow:-8px 0 24px rgba(0,0,0,0.12);
+  transform:translateX(100%);transition:transform .35s ease;z-index:30;
+  display:flex;flex-direction:column;border-inline-start:1px solid var(--border);
+  overflow-y:auto;overflow-x:hidden;
+}
 .sidebar.open{transform:translateX(0);}
 .sidebar-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;background:var(--muted);border-bottom:1px solid var(--border);}
 .sidebar-body{padding:12px;overflow:auto;flex:1;}
@@ -101,215 +108,133 @@ footer{text-align:center;font-size:12px;color:#666;padding:18px 10px;}
   </div>
   <div class="sidebar-body">
     <h3>⭐ علاقه‌مندی‌ها</h3><ul class="list" id="favList"><li>هنوز چیزی ستاره‌دار نشده</li></ul>
-    <h3>📢 اطلاعیه‌ها</h3><ul class="list" id="newsList"></ul>
-    <h3>⚠️ هشدارها</h3><ul class="list" id="alertList"></ul>
+    <h3>📢 اطلاعیه‌ها</h3><ul class="list" id="newsList"><li>به‌زودی اخبار کشاورزی و محصولات اضافه می‌شود</li></ul>
+    <h3>⚠️ هشدارها</h3><ul class="list" id="alertList"><li>هشدار آبیاری و شرایط جوی روزانه</li></ul>
   </div>
 </aside>
 
-<section class="block muted">
-  <div class="grid cols-2">
-    <div>
-      <h2>🔎 جستجو</h2>
-      <div class="controls">
-        <input class="input" id="searchInput" placeholder="نام محصول یا مقاله را بنویسید…" />
-        <button class="btn-solid" id="searchBtn">جستجو</button>
-        <button class="btn" id="clearSearch">پاک‌سازی</button>
-      </div>
-      <small>نتایج جستجو، بخش «مقالات» و «محصولات» را فیلتر می‌کند.</small>
+<section>
+  <div class="carousel" id="carousel1">
+    <div class="slides">
+      <img src="https://source.unsplash.com/600x300/?farm" alt="تصویر کشاورزی">
+      <img src="https://source.unsplash.com/600x300/?vegetables" alt="تصویر سبزیجات">
+      <img src="https://source.unsplash.com/600x300/?market" alt="بازار محلی">
     </div>
-    <div>
-      <h2>📆 تقویم کشاورزی (اهواز)</h2>
-      <div class="controls">
-        <span class="pill" id="todayDate">—</span>
-        <span class="pill" id="seasonTip">—</span>
-        <span class="pill" id="pageViews">بازدید: —</span>
-      </div>
-    </div>
+    <button class="car-btn car-prev" onclick="prevSlide('carousel1')">‹</button>
+    <button class="car-btn car-next" onclick="nextSlide('carousel1')">›</button>
   </div>
 </section>
 
-<section class="block" id="weather">
-  <h2>🌤️ وضعیت هوا</h2>
-  <div class="controls">
-    <input class="input" id="cityInput" placeholder="نام شهر (فارسی یا انگلیسی)" />
-    <button class="btn-solid" id="btnSearchWeather">جستجو</button>
-    <button class="btn" id="btnMyLocation">📍 موقعیت من</button>
-  </div>
-  <div id="weatherResult" class="weather-result" style="display:none"></div>
-</section>
-
-<section class="block" id="articles">
-  <h2>📚 مقالات</h2>
-  <div class="grid cols-2" id="articleGrid">
-    <article class="article" data-id="art-cucumber"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>کشت خیار در اهواز</h3><small class="pill">تابستان | اوایل شهریور</small><div class="content">خیار در اوایل ماه ۶ کاشته می‌شود و حدود ۴۰ روز بعد برداشت می‌گردد. مناسب برای تابستان گرم اهواز، با آبیاری منظم و سایه‌بان سبک.</div></article>
-    <article class="article" data-id="art-tomato"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>گوجه‌فرنگی در اهواز</h3><small class="pill">بهار | روش جوی و پشته</small><div class="content">گوجه با روش سنتی جوی و پشته و آبیاری غرقابی کاشته می‌شود. تهویه مناسب و کنترل بیماری‌های قارچی توصیه می‌شود.</div></article>
-    <article class="article" data-id="art-onion"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>پیاز در اهواز</h3><small class="pill">پاییز | برداشت تابستان</small><div class="content">پیاز در پاییز کاشته و در تابستان برداشت می‌شود. مدیریت تغذیه و مبارزه با علف‌های هرز کلیدی است.</div></article>
-    <article class="article" data-id="art-melon"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>طالبی محلی</h3><small class="pill">بهار | دمای معتدل</small><div class="content">برای شیرینی بیشتر، آبیاری را پیش از برداشت کمی کاهش دهید و نور کافی فراهم کنید.</div></article>
-  </div>
-</section>
-
-<section class="block" id="products">
-  <h2>🛒 محصولات کشاورزی</h2>
-  <div class="grid cols-2" id="productGrid">
-    <div class="product" data-title="خیار تازه اهواز"><strong>خیار تازه اهواز</strong>
-      <div class="carousel" data-index="0">
-        <div class="slides">
-          <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+1" alt="خیار 1">
-          <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+2" alt="خیار 2">
-          <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+3" alt="خیار 3">
-        </div>
-        <button class="car-btn car-prev">‹</button>
-        <button class="car-btn car-next">›</button>
-      </div>
-      <p>برداشت مستقیم از مزرعه. خرید حضوری.</p>
+<section>
+  <div class="block">
+    <h2>هواشناسی اهواز</h2>
+    <div class="controls">
+      <input type="text" id="cityInput" class="input" placeholder="نام شهر را وارد کنید..." />
+      <button class="btn-solid" onclick="getWeather()">جستجو</button>
     </div>
-    <div class="product" data-title="گوجه محلی رسیده"><strong>گوجه محلی رسیده</strong>
-      <div class="carousel" data-index="0">
-        <div class="slides">
-          <img src="https://via.placeholder.com/800x420?text=%DA%AF%D9%88%D8%AC%D9%87+1" alt="گوجه 1">
-          <img src="https://via.placeholder.com/800x420?text=%DA%AF%D9%88%D8%AC%D9%87+2" alt="گوجه 2">
-        </div>
-        <button class="car-btn car-prev">‹</button>
-        <button class="car-btn car-next">›</button>
-      </div>
-      <p>تازه و خوش‌عطر. مناسب سس و سالاد.</p>
+    <div id="weatherResult" class="weather-result">نتیجه هواشناسی نمایش داده می‌شود</div>
+  </div>
+</section>
+
+<section class="grid cols-2">
+  <div class="article" onclick="this.classList.toggle('open')">
+    <div class="star" onclick="toggleStar(event,this)">☆</div>
+    <h3>کاشت خیار چنبر در اهواز</h3>
+    <div class="content">
+      خیار چنبر در اهواز اوایل برج ۶ کاشته می‌شود و بعد از حدود ۴۰ روز برداشت می‌گردد. این خیار دارای خواص آنتی‌اکسیدانی و هیدراته‌کننده است.
+    </div>
+  </div>
+  <div class="article" onclick="this.classList.toggle('open')">
+    <div class="star" onclick="toggleStar(event,this)">☆</div>
+    <h3>گوجه‌فرنگی سنتی جوی و پشته</h3>
+    <div class="content">
+      روش سنتی جوی و پشته با آبیاری غرقابی باعث رشد بهتر گوجه در اهواز می‌شود. محصول سالم و ارگانیک است.
     </div>
   </div>
 </section>
 
-<section class="block">
-  <h2>📢 تبلیغات</h2>
-  <div class="grid"><div class="block muted">محل نمایش تبلیغات محصولات کشاورزی و محلی شما</div></div>
+<section class="grid cols-2">
+  <div class="product">
+    <h3>سبزیجات تازه</h3>
+    <p>مستقیم از مزرعه اهواز، کیفیت عالی و تازه</p>
+  </div>
+  <div class="product">
+    <h3>کود و تجهیزات کشاورزی</h3>
+    <p>فروش حضوری در اهواز، مناسب انواع کشت‌ها</p>
+  </div>
 </section>
-
-<section class="block" id="contact">
-  <h2>📞 تماس با ما</h2>
-  <p>واتساپ: <a href="https://wa.me/989332356547">09332356547</a></p>
-  <p>تلفن: 09332356547</p>
-</section>
-
-<nav class="bottom-nav">
-  <a class="nav-item" href="#home">🏠<span>خانه</span></a>
-  <a class="nav-item" href="#products">🛒<span>محصولات</span></a>
-  <a class="nav-item" href="#articles">📚<span>مقالات</span></a>
-  <a class="nav-item" href="#contact">☎️<span>تماس</span></a>
-</nav>
 
 <button class="to-top" id="toTop" title="بازگشت به بالا">↑</button>
 <footer>© مای‌ده — ساخته شده با عشق برای روستا 🌿</footer>
 
 <script>
-// ابزارک‌های عمومی
 const $ = s=>document.querySelector(s);
 const $$ = s=>document.querySelectorAll(s);
 
 // سایدبار
-$('#openSidebar').onclick=()=>$('#sidebar').classList.add('open');
-$('#closeSidebar').onclick=()=>$('#sidebar').classList.remove('open');
+const sidebar = $('#sidebar');
+$('#openSidebar').onclick = ()=>{
+  sidebar.classList.add('open');
+  document.body.style.overflow='hidden';
+};
+$('#closeSidebar').onclick = ()=>{
+  sidebar.classList.remove('open');
+  document.body.style.overflow='';
+};
 
 // ساعت اهواز
 function updateClock(){
-  const timeStr = new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Tehran'});
-  $('#clockAhvaz').innerText = timeStr;
+  const tz = new Date().toLocaleString("fa-IR",{timeZone:"Asia/Tehran"});
+  const timeStr = new Date(tz).toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  $('#clockAhvaz').innerText=timeStr;
 }
-setInterval(updateClock,1000);
-updateClock();
-
-// تغییر تم
-$('#themeSelect').onchange=e=>document.body.className = e.target.value || 'theme-green';
+setInterval(updateClock,1000); updateClock();
 
 // به بالا
 window.onscroll=()=>{$('#toTop').classList.toggle('show',window.scrollY>300);}
 $('#toTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
 
+// تغییر تم
+$('#themeSelect').onchange=e=>document.body.className = e.target.value || 'theme-green';
+
 // Carousel
-$$('.carousel').forEach(car=>{
-  const slides = car.querySelector('.slides');
-  const imgs = slides.children;
-  let idx = 0;
-  car.querySelector('.car-prev').onclick = ()=>{
-    idx = (idx-1+imgs.length)%imgs.length;
-    slides.style.transform = `translateX(-${idx*100}%)`;
-  };
-  car.querySelector('.car-next').onclick = ()=>{
-    idx = (idx+1)%imgs.length;
-    slides.style.transform = `translateX(-${idx*100}%)`;
-  };
-});
-
-// علاقه‌مندی‌ها
-const favsKey='mydehFavs';
-let favs = JSON.parse(localStorage.getItem(favsKey)||'[]');
-function updateFavUI(){
-  const ul = $('#favList'); ul.innerHTML='';
-  if(!favs.length){ul.innerHTML='<li>هنوز چیزی ستاره‌دار نشده</li>';return;}
-  favs.forEach(f=>{const li=document.createElement('li');li.innerText=f;ul.appendChild(li);});
+function nextSlide(id){
+  const carousel = document.getElementById(id);
+  const slides = carousel.querySelector('.slides');
+  slides.appendChild(slides.firstElementChild);
 }
-updateFavUI();
-$$('.article').forEach(a=>{
-  const star=a.querySelector('.star');
-  const id=a.dataset.id;
-  if(favs.includes(id)) star.classList.add('active');
-  star.onclick=()=>{
-    if(favs.includes(id)){
-      favs=favs.filter(x=>x!==id); star.classList.remove('active');
-    }else{favs.push(id); star.classList.add('active');}
-    localStorage.setItem(favsKey,JSON.stringify(favs));
-    updateFavUI();
-  };
-  a.querySelector('h3').onclick=()=>a.classList.toggle('open');
-});
-
-// جستجو
-$('#searchBtn').onclick=()=>{
-  const q=$('#searchInput').value.toLowerCase();
-  $$('#articleGrid .article').forEach(a=>{
-    a.style.display=a.innerText.toLowerCase().includes(q)?'block':'none';
-  });
-  $$('#productGrid .product').forEach(p=>{
-    p.style.display=p.dataset.title.toLowerCase().includes(q)?'block':'none';
-  });
-};
-$('#clearSearch').onclick=()=>{
-  $('#searchInput').value='';
-  $$('#articleGrid .article, #productGrid .product').forEach(el=>el.style.display='block');
-};
-
-// هواشناسی
-const WEATHER_KEY='dc9c93f51cdd375d459483c2a9f86d88';
-async function getWeather(city){
-  const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_KEY}&units=metric&lang=fa`);
-  const data=await res.json();
-  showWeather(data);
+function prevSlide(id){
+  const carousel = document.getElementById(id);
+  const slides = carousel.querySelector('.slides');
+  slides.insertBefore(slides.lastElementChild, slides.firstElementChild);
 }
-async function getWeatherCoords(lat,lon){
-  const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_KEY}&units=metric&lang=fa`);
-  const data=await res.json();
-  showWeather(data);
-}
-function showWeather(data){
-  const w=$('#weatherResult');
-  if(data.main){
-    w.style.display='flex';
-    w.innerHTML=`<div><strong>${data.name}</strong><br>🌡️ ${data.main.temp}°C | ${data.weather[0].description}</div>`;
-  }else{
-    w.style.display='flex';
-    w.innerText='شهر یافت نشد';
+
+// ستاره‌دار کردن مقالات
+function toggleStar(e,el){
+  e.stopPropagation();
+  el.classList.toggle('active');
+  const li = document.createElement('li');
+  li.textContent = el.nextElementSibling.textContent;
+  if(el.classList.contains('active')){
+    $('#favList').appendChild(li);
+  } else {
+    Array.from($('#favList').children).forEach(child=>{
+      if(child.textContent===el.nextElementSibling.textContent) child.remove();
+    });
   }
 }
-$('#btnSearchWeather').onclick=()=>getWeather($('#cityInput').value);
-$('#btnMyLocation').onclick=()=>navigator.geolocation.getCurrentPosition(p=>getWeatherCoords(p.coords.latitude,p.coords.longitude));
 
-// اطلاعیه‌ها نمونه
-const newsList=$('#newsList');
-['برداشت خیار آغاز شد','کود کامل برای گوجه‌فرنگی موجود است','آب‌یاری اضطراری در روستای فلان'].forEach(n=>{
-  const li=document.createElement('li'); li.innerText=n; newsList.appendChild(li);
-});
-// هشدارها نمونه
-const alertList=$('#alertList');
-['هشدار گرمای شدید امروز','احتمال بارش در نیمه‌شب'].forEach(a=>{
-  const li=document.createElement('li'); li.innerText=a; alertList.appendChild(li);
-});
+// هواشناسی با کلید dc9c93f51cdd375d459483c2a9f86d88
+async function getWeather(){
+  const city = $('#cityInput').value || 'Ahvaz';
+  const key = 'dc9c93f51cdd375d459483c2a9f86d88';
+  try{
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric&lang=fa`);
+    const data = await res.json();
+    if(data.cod!==200){$('#weatherResult').innerText='شهر یافت نشد';return;}
+    $('#weatherResult').innerHTML=`<strong>${data.name}</strong>: ${data.weather[0].description}, دما: ${data.main.temp}°C, رطوبت: ${data.main.humidity}%`;
+  }catch(e){$('#weatherResult').innerText='خطا در دریافت اطلاعات';}
+}
 </script>
 
 </body>
