@@ -44,8 +44,12 @@ header .links a{margin-left:12px;background:#fff;color:var(--primary);padding:8p
   overflow-y: auto;
 }
 .sidebar.active{right:0;}
-.sidebar h2{margin-top:0;}
+.sidebar h2{margin-top:40px;}
 .sidebar a{display:block;color:#fff;padding:10px;border-radius:6px;margin:5px 0;}
+.sidebar button#closeSidebar{
+  position:absolute; top:10px; left:10px;
+  padding:6px 10px; border:none; border-radius:6px; cursor:pointer;
+}
 main{padding:20px;position: relative; z-index: 1;}
 .card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:20px;box-shadow:var(--shadow);transition:0.2s;position: relative; z-index: 1;}
 .card:hover{transform:scale(1.02);}
@@ -77,6 +81,7 @@ button.searchBtn{padding:8px 12px;border:none;background:var(--primary);color:#f
 </header>
 
 <aside class="sidebar" id="sidebar">
+  <button id="closeSidebar">❌️</button>
   <h2>منو</h2>
   <a href="#home">خانه</a>
   <a href="#products">محصولات</a>
@@ -154,6 +159,7 @@ button.searchBtn{padding:8px 12px;border:none;background:var(--primary);color:#f
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 menuBtn.onclick = () => sidebar.classList.toggle("active");
+document.getElementById('closeSidebar').onclick = ()=>sidebar.classList.remove('active');
 
 // علاقه‌مندی‌ها
 document.querySelectorAll('.article .star').forEach(star=>{
