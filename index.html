@@ -1,593 +1,220 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مای‌ده - بازار و هواشناسی اهواز</title>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #f6fff6;
-            --text: #232323;
-            --card: #fff;
-            --muted: #eef7ee;
-            --primary: #2e7d32;
-            --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-            --border: #dfe7df;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>مای‌ده - کشاورزی و هواشناسی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: #f6fff6; --text: #232323; --card: #fff;
+  --muted: #eef7ee; --primary: #2e7d32; --shadow: 0 6px 18px rgba(0,0,0,0.08);
+  --border: #dfe7df;
+}
+.theme-dark{--bg:#171a17;--text:#f2fff2;--card:#222a22;--muted:#243024;--primary:#74d37a;--shadow:0 8px 20px rgba(0,0,0,0.35);--border:#2f3a2f;}
+.theme-green{--bg:#f2fff6;--text:#203220;--card:#fff;--muted:#e6f5ea;--primary:#2e7d32;--shadow:0 6px 18px rgba(46,125,50,0.18);--border:#cfe4d4;}
+.theme-brown{--bg:#f9f6f2;--text:#2e241a;--card:#fff;--muted:#efe7de;--primary:#7a5230;--shadow:0 6px 18px rgba(122,82,48,0.18);--border:#e1d5c8;}
 
-        .theme-dark {
-            --bg: #171a17;
-            --text: #f2fff2;
-            --card: #222a22;
-            --muted: #243024;
-            --primary: #74d37a;
-            --shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-            --border: #2f3a2f;
-        }
+html,body{height:100%;margin:0;font-family:'Vazirmatn',sans-serif;line-height:1.75;background:var(--bg);color:var(--text);}
+a{color:var(--primary);text-decoration:none;}
+img{max-width:100%;display:block;}
+header{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,var(--primary),#1b4b1d);color:#fff;padding:16px;box-shadow:var(--shadow);}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-0.3px;}
+.head-actions{display:flex;align-items:center;gap:8px;}
+.select,.btn{border:none;border-radius:12px;padding:8px 12px;background:#ffffff22;color:#fff;backdrop-filter: blur(6px);cursor:pointer;font-weight:600;}
+.select{appearance:none;outline:none;}
+.ticker{margin-top:10px;background:#ffffff22;border-radius:12px;padding:10px;overflow:hidden;position:relative;font-size:14px;}
+.ticker .slide{white-space:nowrap;display:inline-block;animation:marquee 15s linear infinite;}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}} 
 
-        .theme-green {
-            --bg: #f2fff6;
-            --text: #203220;
-            --card: #fff;
-            --muted: #e6f5ea;
-            --primary: #2e7d32;
-            --shadow: 0 6px 18px rgba(46, 125, 50, 0.18);
-            --border: #cfe4d4;
-        }
+section{padding:16px;}
+.block{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin:16px 0;}
+.block h2{margin:0 0 10px 0;font-size:20px;}
+.muted{background:var(--muted);}
+.grid{display:grid;gap:14px;}
+@media(min-width:720px){.grid.cols-2{grid-template-columns:1fr 1fr}.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
 
-        .theme-brown {
-            --bg: #f9f6f2;
-            --text: #2e241a;
-            --card: #fff;
-            --muted: #efe7de;
-            --primary: #7a5230;
-            --shadow: 0 6px 18px rgba(122, 82, 48, 0.18);
-            --border: #e1d5c8;
-        }
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;}
+.input,.btn-solid{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:12px;padding:10px 12px;}
+.btn-solid{background:var(--primary);color:#fff;border:none;cursor:pointer;}
 
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: 'Vazirmatn', sans-serif;
-            line-height: 1.75;
-            background: var(--bg);
-            color: var(--text);
-        }
+.article{border:1px solid var(--border);border-radius:14px;padding:12px;background:var(--card);position:relative;overflow:hidden;transition: transform .2s ease, box-shadow .2s ease;}
+.article:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.article .star{position:absolute;inset-inline-start:10px;top:10px;cursor:pointer;user-select:none;font-size:20px;color:#bbb;}
+.article .star.active{color:gold;}
+.article .content{display:none;margin-top:8px;}
+.article.open .content{display:block;}
 
-        a {
-            color: var(--primary);
-            text-decoration: none;
-        }
+.product{border:1px solid var(--border);border-radius:16px;padding:12px;background:var(--card);}
+.carousel{position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--border);background:var(--muted);}
+.slides{display:flex;transition:transform .35s ease;}
+.slides img{width:100%;flex:0 0 100%;}
+.car-btn{position:absolute;top:50%;transform:translateY(-50%);border:none;background:#0007;color:#fff;padding:8px 10px;border-radius:10px;cursor:pointer;}
+.car-prev{inset-inline-start:6px;}
+.car-next{inset-inline-end:6px;}
 
-        img {
-            max-width: 100%;
-            display: block;
-        }
+.bottom-nav{position:sticky;bottom:0;z-index:9;display:flex;justify-content:space-around;gap:8px;align-items:center;background:var(--card);border-top:1px solid var(--border);padding:8px;box-shadow:var(--shadow);}
+.nav-item{display:flex;flex-direction:column;align-items:center;font-size:12px;gap:4px;color:var(--text);}
 
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: linear-gradient(135deg, var(--primary), #1b4b1d);
-            color: #fff;
-            padding: 12px 16px 8px;
-            box-shadow: var(--shadow);
-        }
-
-        .head-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand h1 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.3px;
-        }
-
-        .head-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .select,
-        .btn {
-            border: none;
-            border-radius: 12px;
-            padding: 8px 12px;
-            background: #ffffff22;
-            color: #fff;
-            backdrop-filter: blur(6px);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .select {
-            appearance: none;
-            outline: none;
-        }
-
-        .ticker {
-            margin-top: 8px;
-            background: #ffffff22;
-            border-radius: 12px;
-            padding: 8px 12px;
-            overflow: hidden;
-            position: relative;
-            font-size: 14px;
-        }
-
-        .ticker .slide {
-            white-space: nowrap;
-            display: inline-block;
-            animation: marquee 15s linear infinite;
-        }
-
-        @keyframes marquee {
-            from {
-                transform: translateX(0)
-            }
-
-            to {
-                transform: translateX(-100%)
-            }
-        }
-
-        .sidebar-toggle {
-            position: fixed;
-            top: 50%;
-            inset-inline-end: 10px;
-            transform: translateY(-50%);
-            z-index: 20;
-        }
-
-        .fab {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            border: none;
-            cursor: pointer;
-            background: var(--primary);
-            color: #fff;
-            font-size: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            inset-inline-end: 0;
-            height: 100%;
-            width: 320px;
-            max-width: 92%;
-            background: var(--card);
-            color: var(--text);
-            box-shadow: -8px 0 24px rgba(0, 0, 0, 0.12);
-            transform: translateX(100%);
-            transition: transform 0.35s ease;
-            z-index: 30;
-            display: flex;
-            flex-direction: column;
-            border-inline-start: 1px solid var(--border);
-        }
-
-        .sidebar.open {
-            transform: translateX(0);
-        }
-
-        .sidebar-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            padding: 12px 14px;
-            background: var(--muted);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .sidebar-body {
-            padding: 12px;
-            overflow: auto;
-            flex: 1;
-        }
-
-        .pill {
-            display: inline-block;
-            background: var(--muted);
-            border: 1px solid var(--border);
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            margin: 2px;
-        }
-
-        .list {
-            margin: 8px 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .list li {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px;
-            margin: 8px 0;
-            background: var(--card);
-        }
-
-        section {
-            padding: 14px;
-        }
-
-        .block {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 14px;
-            box-shadow: var(--shadow);
-            margin: 12px 0;
-        }
-
-        .block h2 {
-            margin: 0 0 8px 0;
-            font-size: 18px;
-        }
-
-        .muted {
-            background: var(--muted);
-        }
-
-        .grid {
-            display: grid;
-            gap: 12px;
-        }
-
-        @media(min-width:720px) {
-            .grid.cols-2 {
-                grid-template-columns: 1fr 1fr
-            }
-
-            .grid.cols-3 {
-                grid-template-columns: repeat(3, 1fr)
-            }
-        }
-
-        .controls {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin: 10px 0;
-        }
-
-        .input,
-        .btn-solid {
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--text);
-            border-radius: 12px;
-            padding: 10px 12px;
-        }
-
-        .btn-solid {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-
-        .weather-result {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border: 1px dashed var(--border);
-            border-radius: 12px;
-            background: var(--muted);
-            margin-top: 10px;
-        }
-
-        .article {
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 12px;
-            background: var(--card);
-            position: relative;
-            overflow: hidden;
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .article:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .article .star {
-            position: absolute;
-            inset-inline-start: 10px;
-            top: 10px;
-            cursor: pointer;
-            user-select: none;
-            font-size: 20px;
-            color: #bbb;
-        }
-
-        .article .star.active {
-            color: gold;
-        }
-
-        .article .content {
-            display: none;
-            margin-top: 8px;
-        }
-
-        .article.open .content {
-            display: block;
-        }
-
-        .product {
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 12px;
-            background: var(--card);
-        }
-
-        .carousel {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--muted);
-        }
-
-        .slides {
-            display: flex;
-            transition: transform .35s ease;
-        }
-
-        .slides img {
-            width: 100%;
-            flex: 0 0 100%;
-        }
-
-        .car-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            border: none;
-            background: #0007;
-            color: #fff;
-            padding: 8px 10px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .car-prev {
-            inset-inline-start: 6px;
-        }
-
-        .car-next {
-            inset-inline-end: 6px;
-        }
-
-        .bottom-nav {
-            position: sticky;
-            bottom: 0;
-            z-index: 9;
-            display: flex;
-            justify-content: space-around;
-            gap: 8px;
-            align-items: center;
-            background: var(--card);
-            border-top: 1px solid var(--border);
-            padding: 8px;
-            box-shadow: var(--shadow);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 12px;
-            gap: 4px;
-            color: var(--text);
-        }
-
-        .to-top {
-            position: fixed;
-            inset-inline-end: 16px;
-            bottom: 76px;
-            z-index: 8;
-            width: 44px;
-            height: 44px;
-            border: none;
-            border-radius: 50%;
-            background: var(--primary);
-            color: #fff;
-            display: none;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-        }
-
-        .to-top.show {
-            display: block;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-            padding: 18px 10px;
-        }
-    </style>
+.to-top{position:fixed;inset-inline-end:16px;bottom:76px;z-index:8;width:44px;height:44px;border:none;border-radius:50%;background:var(--primary);color:#fff;display:none;cursor:pointer;box-shadow:var(--shadow);}
+.to-top.show{display:block;}
+footer{text-align:center;font-size:12px;color:#666;padding:18px 10px;}
+</style>
 </head>
-
 <body class="theme-green">
 
 <header id="home">
-    <div class="head-row">
-        <div class="brand"><span style="font-size:22px">🌱</span><h1>مای‌ده - بازار و هواشناسی اهواز</h1></div>
-        <div class="head-actions">
-            <select id="themeSelect" class="select" title="انتخاب تم">
-                <option value="theme-green">سبز</option>
-                <option value="theme-brown">قهوه‌ای</option>
-                <option value="theme-dark">تیره</option>
-                <option value="">روشن</option>
-            </select>
-            <button id="clockBtn" class="btn" title="ساعت اهواز">⏰</button>
-        </div>
+  <div class="head-row">
+    <div class="brand"><span style="font-size:28px">🌱</span><h1>مای‌ده - بازار و کشاورزی اهواز</h1></div>
+    <div class="head-actions">
+      <select id="themeSelect" class="select" title="انتخاب تم">
+        <option value="theme-green">سبز</option>
+        <option value="theme-brown">قهوه‌ای</option>
+        <option value="theme-dark">تیره</option>
+        <option value="">روشن</option>
+      </select>
+      <span id="clockAhvaz" class="btn">--:--</span>
     </div>
-    <div class="ticker" aria-live="polite"><div class="slide">🌾 خوش آمدید به مای‌ده | فروش مستقیم محصولات محلی | ابزارهای کشاورزی و هواشناسی حرفه‌ای | پرداخت فقط حضوری | اهواز و روستاهای اطراف </div></div>
+  </div>
+  <div class="ticker"><div class="slide">🌾 خوش آمدید به مای‌ده | فروش مستقیم محصولات محلی | ابزارهای کشاورزی | پرداخت فقط حضوری | اهواز و اطراف</div></div>
 </header>
 
-<div class="sidebar-toggle"><button class="fab" id="openSidebar" title="لیست/اطلاعیه/هشدار">📑</button></div>
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-head">
-        <strong>پنل مای‌ده</strong>
-        <div><span class="pill" id="clockAhvaz">--:--</span><button class="btn" id="closeSidebar">بستن</button></div>
-    </div>
-    <div class="sidebar-body">
-        <h3>⭐ علاقه‌مندی‌ها</h3><ul class="list" id="favList"><li>هنوز چیزی ستاره‌دار نشده</li></ul>
-        <h3>📢 اطلاعیه‌ها</h3><ul class="list" id="newsList"></ul>
-        <h3>⚠️ هشدارها</h3><ul class="list" id="alertList"></ul>
-    </div>
-</aside>
-
 <section class="block muted">
-    <div class="grid cols-2">
-        <div>
-            <h2>🔎 جستجو</h2>
-            <div class="controls">
-                <input class="input" id="searchInput" placeholder="نام محصول یا مقاله را بنویسید…" />
-                <button class="btn-solid" id="searchBtn">جستجو</button>
-                <button class="btn" id="clearSearch">پاک‌سازی</button>
-            </div>
-            <small>نتایج جستجو، بخش «مقالات» و «محصولات» را فیلتر می‌کند.</small>
-        </div>
-        <div>
-            <h2>📆 تقویم کشاورزی (اهواز)</h2>
-            <div class="controls">
-                <span class="pill" id="todayDate">—</span>
-                <span class="pill" id="seasonTip">—</span>
-                <span class="pill" id="pageViews">بازدید: —</span>
-            </div>
-        </div>
+  <div class="grid cols-2">
+    <div>
+      <h2>🔎 جستجو</h2>
+      <div class="controls">
+        <input class="input" id="searchInput" placeholder="نام محصول یا مقاله…" />
+        <button class="btn-solid" id="searchBtn">جستجو</button>
+        <button class="btn" id="clearSearch">پاک‌سازی</button>
+      </div>
+      <small>نتایج جستجو، مقالات و محصولات را فیلتر می‌کند.</small>
     </div>
-</section>
-
-<section class="block" id="weather">
-    <h2>🌤️ وضعیت هوا</h2>
-    <div class="controls">
-        <input class="input" id="cityInput" placeholder="نام شهر (فارسی یا انگلیسی)" />
-        <button class="btn-solid" id="btnSearchWeather">جستجو</button>
-        <button class="btn" id="btnMyLocation">📍 موقعیت من</button>
+    <div>
+      <h2>📊 آمار بازدید و زمان</h2>
+      <div class="controls">
+        <span class="pill" id="pageViews">بازدید: 0</span>
+      </div>
     </div>
-    <div id="weatherResult" class="weather-result" style="display:none"></div>
+  </div>
 </section>
 
 <section class="block" id="articles">
-    <h2>📚 مقالات</h2>
-    <div class="grid cols-2" id="articleGrid">
-        <article class="article" data-id="art-cucumber"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>کشت خیار در اهواز</h3><small class="pill">تابستان | اوایل شهریور</small><div class="content">خیار در اوایل ماه ۶ کاشته می‌شود و حدود ۴۰ روز بعد برداشت می‌گردد. مناسب برای تابستان گرم اهواز، با آبیاری منظم و سایه‌بان سبک.</div></article>
-        <article class="article" data-id="art-tomato"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>گوجه‌فرنگی در اهواز</h3><small class="pill">بهار | روش جوی و پشته</small><div class="content">گوجه با روش سنتی جوی و پشته و آبیاری غرقابی کاشته می‌شود. تهویه مناسب و کنترل بیماری‌های قارچی توصیه می‌شود.</div></article>
-        <article class="article" data-id="art-onion"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>پیاز در اهواز</h3><small class="pill">پاییز | برداشت تابستان</small><div class="content">پیاز در پاییز کاشته و در تابستان برداشت می‌شود. مدیریت تغذیه و مبارزه با علف‌های هرز کلیدی است.</div></article>
-        <article class="article" data-id="art-melon"><div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div><h3>طالبی محلی</h3><small class="pill">بهار | دمای معتدل</small><div class="content">برای شیرینی بیشتر، آبیاری را پیش از برداشت کمی کاهش دهید و نور کافی فراهم کنید.</div></article>
-    </div>
+  <h2>📚 مقالات</h2>
+  <div class="grid cols-2" id="articleGrid">
+    <article class="article" data-id="art-cucumber">
+      <div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div>
+      <h3>کشت خیار در اهواز</h3>
+      <small class="pill">تابستان | اوایل شهریور</small>
+      <div class="content">خیار در اوایل ماه ۶ کاشته می‌شود و حدود ۴۰ روز بعد برداشت می‌گردد.</div>
+    </article>
+    <article class="article" data-id="art-tomato">
+      <div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div>
+      <h3>گوجه‌فرنگی در اهواز</h3>
+      <small class="pill">بهار | روش جوی و پشته</small>
+      <div class="content">گوجه با روش سنتی جوی و پشته و آبیاری غرقابی کاشته می‌شود.</div>
+    </article>
+  </div>
 </section>
 
 <section class="block" id="products">
-    <h2>🛒 محصولات کشاورزی</h2>
-    <div class="grid cols-2" id="productGrid">
-        <div class="product" data-title="خیار تازه اهواز"><strong>خیار تازه اهواز</strong>
-            <div class="carousel" data-index="0">
-                <div class="slides">
-                    <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+1" alt="خیار 1">
-                    <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+2" alt="خیار 2">
-                    <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+3" alt="خیار 3">
-                </div>
-                <button class="car-btn car-prev">‹</button>
-                <button class="car-btn car-next">›</button>
-            </div>
+  <h2>🛒 محصولات کشاورزی</h2>
+  <div class="grid cols-2" id="productGrid">
+    <div class="product" data-title="خیار تازه اهواز"><strong>خیار تازه اهواز</strong>
+      <div class="carousel" data-index="0">
+        <div class="slides">
+          <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+1" alt="خیار 1">
+          <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+2" alt="خیار 2">
         </div>
-        <div class="product" data-title="گوجه‌فرنگی اهواز"><strong>گوجه‌فرنگی اهواز</strong>
-            <div class="carousel" data-index="0">
-                <div class="slides">
-                    <img src="https://via.placeholder.com/800x420?text=%DA%AF%D9%88%D8%AC%D9%87+1" alt="گوجه 1">
-                    <img src="https://via.placeholder.com/800x420?text=%DA%AF%D9%88%D8%AC%D9%87+2" alt="گوجه 2">
-                    <img src="https://via.placeholder.com/800x420?text=%DA%AF%D9%88%D8%AC%D9%87+3" alt="گوجه 3">
-                </div>
-                <button class="car-btn car-prev">‹</button>
-                <button class="car-btn car-next">›</button>
-            </div>
-        </div>
+        <button class="car-btn car-prev">‹</button>
+        <button class="car-btn car-next">›</button>
+      </div>
+      <p>برداشت مستقیم از مزرعه. خرید حضوری.</p>
     </div>
+    <div class="product" data-title="گوجه محلی"><strong>گوجه محلی رسیده</strong>
+      <div class="carousel" data-index="0">
+        <div class="slides">
+          <img src="https://via.placeholder.com/800x420?text=%DA%AF%D9%88%D8%AC%D9%87+1" alt="گوجه 1">
+          <img src="https://via.placeholder.com/800x420?text=%DA%AF%D9%88%D8%AC%D9%87+2" alt="گوجه 2">
+        </div>
+        <button class="car-btn car-prev">‹</button>
+        <button class="car-btn car-next">›</button>
+      </div>
+      <p>تازه و خوش‌عطر. مناسب سس و سالاد.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>🌤️ هواشناسی پیشرفته</h2>
+  <p>برای مشاهده وضعیت هواشناسی پیشرفته، <a href="https://mehdieidani.github.io/Hava-Ahwaz55/" target="_blank">اینجا کلیک کنید</a>.</p>
 </section>
 
 <footer>
-    <p>&copy; 2025 مای‌ده | <a href="https://github.com/mehdieidani/mydeh" target="_blank">کد منبع</a></p>
+  <p>&copy; 2025 مای‌ده | بازدید: <span id="pageViewsFooter">0</span></p>
 </footer>
 
-<!-- Scripts -->
+<button class="to-top" id="toTop" title="بازگشت به بالا">↑</button>
+
 <script>
-    document.getElementById("openSidebar").onclick = () => document.getElementById("sidebar").classList.add("open");
-    document.getElementById("closeSidebar").onclick = () => document.getElementById("sidebar").classList.remove("open");
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
 
-    document.querySelectorAll(".star").forEach(star => {
-        star.addEventListener("click", function () {
-            this.classList.toggle("active");
-        });
-    });
+// ساعت اهواز
+function updateClock(){
+  const d = new Date();
+  $('#clockAhvaz').innerText = d.toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateClock,60000); updateClock();
 
-    // Fetching Weather Info (placeholder)
-    document.getElementById("btnSearchWeather").onclick = () => {
-        let city = document.getElementById("cityInput").value;
-        document.getElementById("weatherResult").style.display = "flex";
-        document.getElementById("weatherResult").innerHTML = `<strong>وضعیت هوا برای ${city}:</strong> آفتابی، دمای 35 درجه`;
-    };
+// تغییر تم
+$('#themeSelect').onchange = e => document.body.className = e.target.value;
 
-    document.getElementById("btnMyLocation").onclick = () => {
-        alert("در حال توسعه...!");
-    };
+// بازگشت به بالا
+const toTopBtn = $('#toTop');
+window.onscroll = () => toTopBtn.classList.toggle('show', window.scrollY>300);
+toTopBtn.onclick = () => window.scrollTo({top:0,behavior:'smooth'});
 
-    // Product Carousel Navigation
-    document.querySelectorAll(".car-prev").forEach(btn => {
-        btn.addEventListener("click", function () {
-            let slides = this.closest(".carousel").querySelector(".slides");
-            slides.style.transform = "translateX(100%)";
-        });
-    });
+// مقالات - علاقه‌مندی
+$$('.article').forEach(a=>{
+  const star=a.querySelector('.star');
+  star.onclick=()=>{
+    star.classList.toggle('active');
+  };
+  a.querySelector('h3').onclick=()=>a.classList.toggle('open');
+});
 
-    document.querySelectorAll(".car-next").forEach(btn => {
-        btn.addEventListener("click", function () {
-            let slides = this.closest(".carousel").querySelector(".slides");
-            slides.style.transform = "translateX(-100%)";
-        });
-    });
+// جستجو
+$('#searchBtn').onclick=()=>{
+  const query=$('#searchInput').value.toLowerCase();
+  $$('#articleGrid .article,#productGrid .product').forEach(el=>{
+    const txt=(el.innerText||'').toLowerCase();
+    el.style.display=txt.includes(query)?'block':'none';
+  });
+}
+$('#clearSearch').onclick=()=>{
+  $('#searchInput').value='';
+  $$('#articleGrid .article,#productGrid .product').forEach(el=>el.style.display='block');
+}
 
-    // Page Top Scroll Button
-    const toTopBtn = document.createElement('button');
-    toTopBtn.className = 'to-top';
-    toTopBtn.innerText = '↑';
-    document.body.appendChild(toTopBtn);
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 400) toTopBtn.classList.add('show');
-        else toTopBtn.classList.remove('show');
-    });
+// Carousel
+$$('.carousel').forEach(car=>{
+  const slides=car.querySelector('.slides');
+  const imgs=slides.querySelectorAll('img');
+  let idx=0;
+  car.querySelector('.car-next').onclick=()=>{idx=(idx+1)%imgs.length;slides.style.transform=`translateX(-${idx*100}%)`;}
+  car.querySelector('.car-prev').onclick=()=>{idx=(idx-1+imgs.length)%imgs.length;slides.style.transform=`translateX(-${idx*100}%)`;}
+});
 
-    toTopBtn.onclick = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
+// آمار بازدید تقریبی
+function updatePageViews(){
+  const count = Math.floor(Math.random()*200 + 50);
+  $('#pageViews').innerText = `بازدید: ${count}`;
+  $('#pageViewsFooter').innerText = count;
+}
+updatePageViews();
 </script>
 
 </body>
