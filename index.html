@@ -1,187 +1,109 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مای‌ده - بازار و هواشناسی اهواز</title>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg: #f6fff6; --text: #232323; --card: #fff;
-      --muted: #eef7ee; --primary: #2e7d32; --shadow: 0 6px 18px rgba(0,0,0,0.08);
-      --border: #dfe7df;
-    }
-
-    body {
-      height: 100%;
-      margin: 0;
-      font-family: 'Vazirmatn', sans-serif;
-      line-height: 1.75;
-      background: var(--bg);
-      color: var(--text);
-      transition: background-color 0.3s ease;
-    }
-
-    a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: linear-gradient(135deg, var(--primary), #1b4b1d);
-      color: #fff;
-      padding: 12px 16px 8px;
-      box-shadow: var(--shadow);
-    }
-
-    header h1 {
-      font-size: 24px;
-    }
-
-    .controls {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin: 10px 0;
-    }
-
-    .pill {
-      display: inline-block;
-      background: var(--muted);
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      margin: 2px;
-    }
-
-    .block {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      margin: 12px 0;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      padding: 18px 10px;
-    }
-
-    #pageViews {
-      font-weight: bold;
-    }
-
-    .weather-result {
-      display: flex;
-      gap: 10px;
-      background: #e0e0e0;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    .input {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      width: 100%;
-      margin-right: 8px;
-    }
-
-    .btn {
-      background: var(--primary);
-      padding: 10px;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-  </style>
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6BTYLDBJT4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-6BTYLDBJT4');
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مای‌ده - بازار و کشاورزی اهواز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6fff6; --text:#232323; --card:#fff;
+  --muted:#eef7ee; --primary:#2e7d32; --shadow:0 6px 18px rgba(0,0,0,0.08);
+  --border:#dfe7df;
+}
+body{margin:0;font-family:'Vazirmatn',sans-serif;line-height:1.75;background:var(--bg);color:var(--text);}
+a{text-decoration:none;color:var(--primary);}
+header{position:sticky;top:0;background:linear-gradient(135deg,var(--primary),#1b4b1d);color:#fff;text-align:center;padding:20px 16px;box-shadow:var(--shadow);}
+header h1{margin:0;font-size:28px;}
+header p{margin:8px 0 0;font-size:16px;font-weight:400;}
+.block{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin:20px auto;max-width:720px;box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s;}
+.block:hover{transform:translateY(-5px);box-shadow:0 12px 24px rgba(0,0,0,0.2);}
+.big-link{display:inline-block;font-size:24px;font-weight:700;padding:20px 30px;background:var(--primary);color:#fff;border-radius:12px;transition:.3s;}
+.big-link:hover{background:#1b4b1d;transform:scale(1.05);}
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0;}
+.pill{display:inline-block;background:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;margin:2px;}
+footer{text-align:center;font-size:12px;color:#666;padding:18px 10px;}
+.grid{display:grid;gap:16px;}
+@media(min-width:720px){.grid.cols-2{grid-template-columns:1fr 1fr}.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
+.card{border:1px solid var(--border);border-radius:16px;background:var(--card);padding:12px;transition:transform .3s,box-shadow .3s;}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.card h3{margin:8px 0;}
+.to-top{position:fixed;bottom:80px;right:16px;width:44px;height:44px;border:none;border-radius:50%;background:var(--primary);color:#fff;display:none;cursor:pointer;box-shadow:var(--shadow);}
+.to-top.show{display:block;}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6BTYLDBJT4"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('config','G-6BTYLDBJT4');
+</script>
 </head>
-
 <body>
-  <header>
-    <h1>🌱 مای‌ده - بازار و هواشناسی اهواز</h1>
-  </header>
+<header>
+  <h1>🌱 مای‌ده - بازار اهواز</h1>
+  <p>فروش مستقیم محصولات محلی و اطلاعات کشاورزی اهواز</p>
+</header>
 
-  <section class="block">
-    <h2>📆 تقویم کشاورزی (اهواز)</h2>
-    <div class="controls">
-      <span class="pill" id="todayDate">—</span>
-      <span class="pill" id="seasonTip">—</span>
-    </div>
-  </section>
+<section class="block">
+  <h2>🌤️ هواشناسی پیشرفته</h2>
+  <a href="https://mehdieidani.github.io/Hava-Ahwaz55/" target="_blank" class="big-link">مشاهده وضعیت آب‌وهوا</a>
+</section>
 
-  <section class="block">
-    <h2>🌤️ وضعیت هوا</h2>
-    <div class="controls">
-      <input class="input" id="cityInput" placeholder="نام شهر (فارسی یا انگلیسی)" />
-      <button class="btn" id="btnSearchWeather">جستجو</button>
-    </div>
-    <div id="weatherResult" class="weather-result" style="display:none"></div>
-    <p><a href="https://mehdieidani.github.io/Hava-Ahwaz55/" target="_blank">صفحه هواشناسی پیشرفته</a></p>
-  </section>
+<section class="block">
+  <h2>📆 تقویم کشاورزی (اهواز)</h2>
+  <div class="controls">
+    <span class="pill" id="todayDate">—</span>
+    <span class="pill" id="seasonTip">—</span>
+  </div>
+</section>
 
-  <section class="block">
-    <h2>📊 آمار بازدید</h2>
-    <div class="controls">
-      <span class="pill" id="pageViews">بازدید: در حال بارگذاری...</span>
-    </div>
-  </section>
+<section class="block">
+  <h2>📚 مقالات</h2>
+  <div class="grid cols-2" id="articleGrid">
+    <div class="card"><h3>کشت خیار</h3><p>تابستان | اوایل شهریور</p></div>
+    <div class="card"><h3>گوجه‌فرنگی</h3><p>بهار | روش جوی و پشته</p></div>
+  </div>
+</section>
 
-  <footer>
-    <p>© مای‌ده — ساخته شده با عشق برای اهواز 🌿</p>
-  </footer>
+<section class="block">
+  <h2>🛒 محصولات</h2>
+  <div class="grid cols-2" id="productGrid">
+    <div class="card"><h3>خیار تازه</h3><p>برداشت مستقیم از مزرعه</p></div>
+    <div class="card"><h3>گوجه محلی</h3><p>تازه و خوش‌عطر</p></div>
+  </div>
+</section>
 
-  <script>
-    // به‌روزرسانی تاریخ و فصل مناسب کشاورزی
-    function updateDateInfo() {
-      const d = new Date();
-      document.getElementById('todayDate').innerText = d.toLocaleDateString('fa-IR');
-      document.getElementById('seasonTip').innerText = 'فصل مناسب کاشت خیار';
-    }
-    updateDateInfo();
+<section class="block">
+  <h2>📊 آمار بازدید</h2>
+  <div class="controls">
+    <span class="pill" id="pageViews">در حال بارگذاری...</span>
+  </div>
+</section>
 
-    // نمایش وضعیت آب‌وهوا از OpenWeatherMap API
-    async function getWeather(city) {
-      const key = 'demo'; // باید اینجا API کلید خود را وارد کنید
-      try {
-        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric&lang=fa`);
-        const data = await res.json();
-        if (data.main) {
-          document.getElementById('weatherResult').style.display = 'flex';
-          document.getElementById('weatherResult').innerHTML = `<div><strong>${data.name}</strong><br>🌡️ ${data.main.temp}°C | ${data.weather[0].description}</div>`;
-        } else throw new Error();
-      } catch (e) {
-        document.getElementById('weatherResult').style.display = 'flex';
-        document.getElementById('weatherResult').innerText = 'شهر یافت نشد';
-      }
-    }
+<footer>
+  <p>© مای‌ده — ساخته شده با عشق برای اهواز 🌿</p>
+</footer>
 
-    document.getElementById('btnSearchWeather').onclick = () => getWeather(document.getElementById('cityInput').value);
+<button class="to-top" id="toTop">↑</button>
 
-    // آمار بازدید
-    setTimeout(function() {
-      document.getElementById('pageViews').innerText = 'بازدید: 1234'; // شمارش بازدید باید از طریق Google Analytics API وارد شود.
-    }, 2000); // برای نمونه، داده‌ها با تاخیر بارگذاری می‌شوند.
-  </script>
+<script>
+// بروزرسانی تاریخ و فصل
+function updateDateInfo(){
+  const d=new Date();
+  document.getElementById('todayDate').innerText=d.toLocaleDateString('fa-IR');
+  document.getElementById('seasonTip').innerText='فصل مناسب کاشت خیار';
+}
+updateDateInfo();
+
+// آمار بازدید نمونه (Google Analytics واقعی شمارش نمی‌شود در صفحه فقط نمونه)
+setTimeout(()=>{document.getElementById('pageViews').innerText='بازدید: 1234';},1000);
+
+// دکمه بازگشت به بالا
+const toTop=document.getElementById('toTop');
+window.onscroll=()=>toTop.classList.toggle('show',window.scrollY>300);
+toTop.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+</script>
 </body>
 </html>
