@@ -21,7 +21,7 @@ header{
   background: var(--primary);
   color: #fff;
   padding: 20px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,7 +29,7 @@ header{
 }
 header h1{margin:0;font-size:32px;font-weight:800;}
 header p{margin:4px 0 0;font-size:16px;}
-header .links a{margin-left:12px;background:#fff;color:var(--primary);padding:8px 12px;border-radius:8px;font-weight:600;}
+header .links a, header .links button{margin-left:12px;background:#fff;color:var(--primary);padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer;border:none;}
 .sidebar{
   position: fixed;
   top: 0;
@@ -75,7 +75,7 @@ button.searchBtn{padding:8px 12px;border:none;background:var(--primary);color:#f
     <p>بازار و مقالات کشاورزی اهواز | فروش مستقیم محصولات محلی | پرداخت حضوری</p>
   </div>
   <div class="links">
-    <a href="#" target="_blank">🌤️ هواشناسی</a>
+    <a href="https://mehdieidani.github.io/Hava-Ahwaz55/" target="_blank">🌤️ هواشناسی</a>
     <button id="menuBtn">☰ منو</button>
   </div>
 </header>
@@ -151,45 +151,54 @@ button.searchBtn{padding:8px 12px;border:none;background:var(--primary);color:#f
 
 <footer>
   📊 بازدید امروز: <span id="todayVisits">0</span> | بازدید کل: <span id="totalVisits">0</span><br>
-  © 2025 مای‌ده — ساخته شده با ❤️
+  © 2025 مای‌ده — ساخته شده با عشق 🌿
 </footer>
 
 <script>
 // سایدبار
-const menuBtn = document.getElementById("menuBtn");
-const sidebar = document.getElementById("sidebar");
-menuBtn.onclick = () => sidebar.classList.toggle("active");
+const sidebar = document.getElementById('sidebar');
+document.getElementById('menuBtn').onclick = ()=>sidebar.classList.add('active');
 document.getElementById('closeSidebar').onclick = ()=>sidebar.classList.remove('active');
 
-// علاقه‌مندی‌ها
-document.querySelectorAll('.article .star').forEach(star=>{
-  star.onclick = ()=>{
-    star.classList.toggle('active');
-    star.innerText = star.classList.contains('active')?'⭐':'☆';
+// لینک‌های سایدبار
+document.querySelectorAll('#sidebar a').forEach(link=>{
+  link.onclick = e=>{
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    const targetEl = document.getElementById(targetId);
+    if(targetEl) targetEl.scrollIntoView({behavior:'smooth'});
+    sidebar.classList.remove('active');
   }
 });
-document.querySelectorAll('.article h4').forEach(h=>{
-  h.onclick = ()=>h.parentElement.classList.toggle('open');
-});
 
-// FAQ
-document.querySelectorAll('.faq-item h4').forEach(h=>{
-  h.onclick = ()=>h.parentElement.classList.toggle('open');
-});
-
-// جستجوی هوشمند
-function normalize(text){return text.replace(/\s+/g,'').toLowerCase();}
+// جستجو هوشمند
 document.getElementById('searchBtn').onclick = ()=>{
-  const q = normalize(document.getElementById('searchInput').value);
-  document.querySelectorAll('#articles .article,#products .article').forEach(a=>{
-    const t = normalize(a.dataset.title);
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  document.querySelectorAll('.article').forEach(a=>{
+    const t = a.dataset.title.toLowerCase();
     a.style.display = t.includes(q)?'block':'none';
   });
 }
 
+// ستاره علاقه‌مندی
+document.querySelectorAll('.article').forEach(a=>{
+  const star = a.querySelector('.star');
+  star.onclick = ()=>{
+    star.classList.toggle('active');
+  }
+  a.querySelector('h4').onclick = ()=>a.classList.toggle('open');
+});
+
+// FAQ باز/بسته
+document.querySelectorAll('.faq-item h4').forEach(f=>{
+  f.onclick = ()=>f.parentElement.classList.toggle('open');
+});
+
 // آمار بازدید نمونه
-document.getElementById('todayVisits').innerText=Math.floor(Math.random()*150+50);
-document.getElementById('totalVisits').innerText=Math.floor(Math.random()*2000+500);
+let todayVisits = Math.floor(Math.random()*50+10);
+let totalVisits = Math.floor(Math.random()*500+100);
+document.getElementById('todayVisits').innerText = todayVisits;
+document.getElementById('totalVisits').innerText = totalVisits;
 </script>
 
 </body>
