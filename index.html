@@ -3,53 +3,53 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>مای‌ده — بازار و هواشناسی اهواز (نسخه جامع)</title>
+<title>مای‌ده — بازار و هواشناسی اهواز (نسخه نهایی)</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
-<!-- Leaflet (نقشه) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+
 <style>
 :root{
-  --bg:#f6fff6; --text:#1e2a1e; --card:#ffffff; --muted:#eef7ee;
+  --bg:#f6fff6; --text:#12321a; --card:#ffffff; --muted:#eef7ee;
   --primary:#2e7d32; --accent:#74c37a; --danger:#d9534f; --border:#dfe7df;
   --glass: rgba(255,255,255,0.6);
+  --shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+html,body{height:100%;margin:0;font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 a{color:var(--primary);text-decoration:none}
-header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--primary),#1b5e20);color:#fff;padding:12px 16px;box-shadow:0 6px 18px rgba(0,0,0,0.12);}
-.header-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+button{cursor:pointer;font-family:inherit}
+header{position:sticky;top:0;z-index:140;background:linear-gradient(90deg,var(--primary),#1b5e20);color:#fff;padding:12px 16px;box-shadow:var(--shadow)}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1180px;margin:0 auto}
 .brand{display:flex;align-items:center;gap:10px}
 .brand h1{margin:0;font-size:20px;font-weight:800}
 .actions{display:flex;align-items:center;gap:8px}
-.btn,select,input[type="text"]{border-radius:12px;padding:8px 12px;border:0;outline:none}
-.select{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.08)}
+.select{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:8px}
 .icon-btn{background:rgba(255,255,255,0.12);color:#fff;border:none;padding:8px;border-radius:10px;cursor:pointer}
 .ticker{margin-top:8px;background:rgba(255,255,255,0.08);padding:8px;border-radius:12px;overflow:hidden;font-size:13px}
 .ticker .slide{display:inline-block;white-space:nowrap;animation:marq 18s linear infinite}
 @keyframes marq{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 
-/* sidebar */
-.sidebar-toggle{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:90}
-.fab{width:48px;height:48px;border-radius:12px;border:none;background:var(--primary);color:#fff;font-size:20px;box-shadow:0 8px 20px rgba(46,125,50,0.2);cursor:pointer}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:70;opacity:0;pointer-events:none;transition:all .25s}
+/* sidebar & overlay */
+.sidebar-toggle{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:150}
+.fab{width:48px;height:48px;border-radius:12px;border:none;background:var(--primary);color:#fff;font-size:20px;box-shadow:0 8px 20px rgba(46,125,50,0.22);cursor:pointer}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:130;opacity:0;pointer-events:none;transition:opacity .28s ease}
 .overlay.show{opacity:1;pointer-events:auto}
 
-/* actual sidebar */
-.sidebar{position:fixed;top:0;right:0;height:100%;width:340px;max-width:92%;background:var(--card);box-shadow:-12px 0 32px rgba(0,0,0,0.12);transform:translateX(110%);transition:transform .35s ease;z-index:80;border-inline-start:1px solid var(--border);display:flex;flex-direction:column}
+/* sidebar */
+.sidebar{position:fixed;top:0;right:0;height:100%;width:360px;max-width:92%;background:var(--card);box-shadow:-12px 0 32px rgba(0,0,0,0.12);transform:translateX(110%);transition:transform .35s ease;z-index:160;border-inline-start:1px solid var(--border);display:flex;flex-direction:column}
 .sidebar.open{transform:translateX(0)}
 .sidebar .head{padding:12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .sidebar .body{padding:14px;overflow:auto;flex:1}
 .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--muted);margin:4px;border:1px solid var(--border);font-size:13px}
 .list{list-style:none;padding:0;margin:10px 0}
-.list li{padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card)}
+.list li{padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--card);font-size:14px}
 
 /* layout */
-.container{max-width:1150px;margin:16px auto;padding:0 14px}
+.container{max-width:1180px;margin:16px auto;padding:0 14px}
 .grid{display:grid;gap:14px}
-@media(min-width:900px){.grid.cols-3{grid-template-columns:1fr 360px 320px}.grid.cols-2{grid-template-columns:1fr 420px}}
+@media(min-width:980px){.grid.cols-3{grid-template-columns:1fr 420px 320px}.grid.cols-2{grid-template-columns:1fr 420px}}
 .block{background:var(--card);padding:14px;border-radius:14px;border:1px solid var(--border);box-shadow:0 6px 20px rgba(0,0,0,0.04);overflow:hidden}
 .hero{position:relative;overflow:hidden;border-radius:14px;min-height:220px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.02));display:flex;align-items:center}
 .hero .hero-left{padding:18px}
@@ -64,7 +64,7 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
 .car-prev{right:10px}
 .car-next{left:10px}
 
-/* articles/products */
+/* cards */
 .card-list{display:grid;gap:12px}
 @media(min-width:720px){.card-list.cols-2{grid-template-columns:1fr 1fr}}
 .article,.product{padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card);position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s}
@@ -81,11 +81,12 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
 .controls{display:flex;gap:8px;flex-wrap:wrap}
 .input{padding:10px;border-radius:12px;border:1px solid var(--border);min-width:180px}
 .btn-solid{background:var(--primary);color:#fff;border:none;padding:10px;border-radius:12px;cursor:pointer}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:rgba(33,33,33,0.9);color:#fff;padding:10px 14px;border-radius:10px;z-index:120;opacity:0;pointer-events:none;transition:all .25s}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:rgba(33,33,33,0.9);color:#fff;padding:10px 14px;border-radius:10px;z-index:200;opacity:0;pointer-events:none;transition:all .25s}
 .toast.show{opacity:1;pointer-events:auto}
 
 /* map */
 #map{height:220px;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+#miniMap{height:160px;border-radius:10px;border:1px solid var(--border);overflow:hidden}
 
 /* faq */
 .accordion{border-radius:8px;overflow:hidden}
@@ -96,29 +97,29 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
 .bottom-nav{position:sticky;bottom:0;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px;border-radius:8px;margin-top:12px}
 .nav-item{display:flex;flex-direction:column;align-items:center;font-size:12px}
 
-/* small helpers */
+/* helpers */
 .hidden{display:none}
 .fade-in{opacity:0;transform:translateY(12px);transition:all .6s ease}
 .fade-in.show{opacity:1;transform:none}
 .sound-btn{background:transparent;border:0;color:var(--primary);cursor:pointer}
 
-/* responsive tweaks */
-@media(max-width:899px){
+/* responsive */
+@media(max-width:979px){
   .grid.cols-3{grid-template-columns:1fr}
   .grid.cols-2{grid-template-columns:1fr}
   .sidebar{width:92%}
 }
 </style>
 </head>
-<body class="theme-green">
+<body>
 
 <header>
-  <div class="header-row container">
+  <div class="header-row">
     <div class="brand">
       <div style="font-size:22px">🌱</div>
       <div>
         <h1>مای‌ده</h1>
-        <div style="font-size:12px;color:rgba(255,255,255,0.9)">بازار و هواشناسی روستایی — اهواز</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.92)">بازار و هواشناسی روستایی — اهواز</div>
       </div>
     </div>
 
@@ -133,16 +134,16 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
     </div>
   </div>
 
-  <div class="container">
+  <div style="max-width:1180px;margin:12px auto;padding:0 14px">
     <div class="ticker"><div class="slide">🌾 خوش آمدید به مای‌ده — خرید مستقیم از مزرعه | اخبار، آموزش، هواشناسی و تقویم کشاورزی</div></div>
   </div>
 </header>
 
-<!-- sidebar toggle -->
+<!-- sidebar toggle and overlay -->
 <div class="sidebar-toggle">
   <button id="openSidebar" class="fab" title="پنل">📑</button>
 </div>
-<div id="overlay" class="overlay"></div>
+<div id="overlay" class="overlay" aria-hidden="true"></div>
 
 <!-- sidebar -->
 <aside id="sidebar" class="sidebar" aria-hidden="true">
@@ -150,9 +151,10 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
     <strong>پنل مای‌ده</strong>
     <div style="display:flex;gap:8px;align-items:center">
       <span class="pill" id="clockAhvaz">--:--:--</span>
-      <button id="closeSidebar" class="icon-btn">✕</button>
+      <button id="closeSidebar" class="icon-btn" aria-label="بستن">✕</button>
     </div>
   </div>
+
   <div class="body">
     <h3>⭐ علاقه‌مندی‌ها</h3>
     <ul id="favList" class="list"><li>هنوز چیزی ستاره‌دار نشده</li></ul>
@@ -171,27 +173,27 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
 
     <h3 style="margin-top:12px">🗺️ نقشه محلی</h3>
     <div id="map"></div>
-
-    <div style="height:24px"></div>
   </div>
 </aside>
 
-<!-- main content -->
-<main class="container" style="padding-bottom:60px">
+<!-- main -->
+<main class="container" style="padding-bottom:80px">
   <div class="grid cols-3">
     <!-- main column -->
     <div>
-      <!-- Hero -->
+      <!-- hero -->
       <section class="block hero fade-in" id="hero" style="margin-bottom:12px">
         <div class="hero-left">
           <h2>مای‌ده — از مزرعه تا سفره</h2>
           <p>فروش مستقیم محصولات محلی، آموزش‌های کشاورزی، هواشناسی و ابزارهایی که کار کشاورز را آسان می‌کند.</p>
+
           <div style="margin-top:10px;display:flex;gap:8px">
             <input id="searchInput" type="text" class="input" placeholder="جستجو در محصولات و مقالات…" />
             <button id="searchBtn" class="btn-solid">جستجو</button>
-            <button id="clearSearch" class="btn" style="background:#fff2">پاک‌سازی</button>
+            <button id="clearSearch" class="icon-btn" style="background:#ffffff22;color:#fff;border-radius:10px">پاک‌سازی</button>
           </div>
         </div>
+
         <div style="flex:1;padding:14px">
           <div class="carousel" id="heroCarousel">
             <div class="slides" aria-hidden="false">
@@ -205,25 +207,23 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
         </div>
       </section>
 
-      <!-- Articles -->
-      <section class="block fade-in">
+      <!-- articles -->
+      <section class="block fade-in" id="articlesSection">
         <h2>📚 مقالات آموزشی</h2>
-        <div class="card-list cols-2" id="articleGrid">
-          <!-- مقالات از JS رندر می‌شوند -->
-        </div>
+        <div class="card-list cols-2" id="articleGrid"></div>
       </section>
 
-      <!-- FAQ -->
+      <!-- faq -->
       <section class="block fade-in" style="margin-top:12px">
         <h2>❓ سوالات متداول</h2>
         <div class="accordion" id="faq">
           <div class="ac-item">
             <button onclick="toggleAC(this)">بهترین زمان کاشت خیار در اهواز چیست؟</button>
-            <div class="ac-body" style="padding:12px">اوایل تابستان (اوایل خرداد/تیر) و برداشت معمولاً حدود 35-45 روز بعد.</div>
+            <div class="ac-body" style="padding:12px;display:none">اوایل تابستان (اوایل خرداد/تیر)؛ برداشت معمولاً حدود 35-45 روز بعد.</div>
           </div>
           <div class="ac-item">
-            <button onclick="toggleAC(this)">چه کودهایی برای گوجه مناسب است؟</button>
-            <div class="ac-body" style="padding:12px">کود کامل NPK و کودهای فسفاته در اوایل رشد و پتاس برای افزایش کیفیت میوه توصیه می‌شود.</div>
+            <button onclick="toggleAC(this)">روش صحیح آبیاری برای گوجه چیست؟</button>
+            <div class="ac-body" style="padding:12px;display:none">آبیاری منظم و جلوگیری از خیس شدن مداوم برگ‌ها؛ آبیاری ریشه‌ای توصیه می‌شود.</div>
           </div>
         </div>
       </section>
@@ -241,13 +241,12 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
 
     <!-- middle column -->
     <div>
-      <!-- Weather -->
       <section class="block fade-in">
-        <h2>🌤️ وضعیت هوا (اوپن‌ویذر)</h2>
+        <h2>🌤️ وضعیت هوا</h2>
         <div class="controls" style="margin-bottom:10px">
-          <input id="cityName" type="text" class="input" placeholder="نام شهر (مثال: Ahvaz یا اهواز)" />
+          <input id="cityName" type="text" class="input" placeholder="نام شهر (مثلاً Ahvaz یا اهواز)" />
           <button id="getWeatherBtn" class="btn-solid">جستجوی هوا</button>
-          <button id="btnMyLoc" class="btn">📍 موقعیت من</button>
+          <button id="btnMyLoc" class="icon-btn">📍 موقعیت من</button>
         </div>
         <div id="weatherResult" class="weather-result">
           <div class="weather-canvas" id="weatherCanvas">—</div>
@@ -255,22 +254,18 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
         </div>
       </section>
 
-      <!-- products -->
       <section class="block fade-in" style="margin-top:12px">
         <h2>🛒 محصولات محلی</h2>
-        <div id="productGrid" class="card-list cols-2">
-          <!-- محصولات با JS رندر می‌شوند -->
-        </div>
+        <div id="productGrid" class="card-list cols-2"></div>
       </section>
 
-      <!-- small stats -->
       <section class="block fade-in" style="margin-top:12px">
         <h2>آمار سریع</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
           <div class="pill" id="todayDate">—</div>
           <div class="pill" id="seasonTip">—</div>
           <div class="pill" id="pageViewsMini">بازدید: —</div>
-          <button id="clearStorage" class="btn" title="ریست آمار">پاک‌سازی محلی</button>
+          <button id="clearStorage" class="icon-btn" title="ریست آمار">🗑</button>
         </div>
       </section>
     </div>
@@ -290,13 +285,13 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
 
       <section class="block fade-in" style="margin-top:12px">
         <h2>نقشه فروشندگان</h2>
-        <div style="font-size:13px;color:#555;margin-bottom:8px">نزدیک‌ترین فروشندگان به شما (نمونه)</div>
-        <div id="miniMap" style="height:160px;border-radius:10px;border:1px solid var(--border)"></div>
+        <div style="font-size:13px;color:#555;margin-bottom:8px">نزدیک‌ترین فروشندگان (نمونه)</div>
+        <div id="miniMap"></div>
       </section>
     </div>
   </div>
 
-  <div class="bottom-nav">
+  <div class="bottom-nav" style="max-width:1180px;margin:12px auto">
     <a href="#home" class="nav-item">🏠<span>خانه</span></a>
     <a href="#products" class="nav-item">🛒<span>محصولات</span></a>
     <a href="#articles" class="nav-item">📚<span>مقالات</span></a>
@@ -304,23 +299,21 @@ header{position:sticky;top:0;z-index:80;background:linear-gradient(90deg,var(--p
   </div>
 </main>
 
-<!-- toast -->
 <div id="toast" class="toast">متن نمونه</div>
 
 <footer style="text-align:center;padding:18px 12px;color:#666">© مای‌ده — ساخته شده با ❤️ برای روستا</footer>
 
-<!-- Scripts: Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-/* ========= تنظیمات اولیه ========= */
-const WEATHER_KEY = 'dc9c93f51cdd375d459483c2a9f86d88'; // کلید شما
+/* =================== پیکربندی =================== */
+const WEATHER_KEY = 'dc9c93f51cdd375d459483c2a9f86d88'; // <-- کلید شما
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
-/* ====== داده‌های نمونه مقالات و محصولات (قابل توسعه) ====== */
+/* داده‌های نمونه */
 const ARTICLES = [
-  {id:'art-cucumber', title:'کاشت خیار چنبر در اهواز', desc:'خیار چنبر مقاوم به گرما، ۴۰ روز بعد برداشت.', tags:['خیار','تابستان'], fresh:true},
+  {id:'art-cucumber', title:'کاشت خیار چنبر در اهواز', desc:'خیار چنبر مقاوم به گرما؛ حدود ۴۰ روز بعد برداشت.', tags:['خیار','تابستان'], fresh:true},
   {id:'art-tomato', title:'گوجه‌فرنگی - روش جوی و پشته', desc:'نکات کوددهی و آبیاری غرقابی برای گوجه', tags:['گوجه','بهار'], fresh:false},
   {id:'art-onion', title:'پیاز در اقلیم اهواز', desc:'مراحل کاشت و نگهداری پیاز', tags:['پیاز'], fresh:false},
   {id:'art-melon', title:'طالبی محلی و تکنیک برداشت', desc:'نکات افزایش شیرینی طالبی', tags:['طالبی'], fresh:true}
@@ -331,65 +324,29 @@ const PRODUCTS = [
   {id:'prd-melon', title:'طالبی محلی', price:'هر عدد ۱۸۰۰۰ تومان', img:'https://source.unsplash.com/600x400/?melon', popular:true, fresh:true}
 ];
 
-/* ====== مدیریت Local Storage برای آمار و علاقه‌مندی ====== */
+/* LocalStorage keys */
 const LS = {
   pageViewsKey:'mydeh_pageviews_total',
-  visitsSeriesKey:'mydeh_visits_series', // آرایه روزانه 7 روز
+  visitsSeriesKey:'mydeh_visits_series',
   favsKey:'mydeh_favs',
-  itemViewsKey:'mydeh_item_views' // object {id:count}
+  itemViewsKey:'mydeh_item_views'
 };
-function readLS(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}
-function writeLS(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
-/* افزایش بازدید صفحه و سری بازدید روزانه */
-function incPageView(){
-  let total = parseInt(localStorage.getItem(LS.pageViewsKey) || '0',10);
-  total++; localStorage.setItem(LS.pageViewsKey, String(total));
-  $('#pageViews').innerText = 'بازدید کل: ' + total;
-  $('#pageViewsMini').innerText = 'بازدید: ' + total;
-  $('#pageViewsMini').dataset.count = total;
-  // سری 7 روزه
-  let series = readLS(LS.visitsSeriesKey, Array(7).fill(0));
-  // آخرین المان را به امروز اضافه می‌کنیم (simple rotate)
-  series[series.length-1] = (series[series.length-1]||0) + 1;
-  writeLS(LS.visitsSeriesKey, series);
-  updateVisitsChart();
-}
+/* helper local storage */
+function readLS(k,def){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : def }catch(e){ return def } }
+function writeLS(k,v){ localStorage.setItem(k, JSON.stringify(v)) }
 
-/* افزایش آمار یک آیتم (مقاله/محصول) */
-function incItemView(id){
-  let obj = readLS(LS.itemViewsKey, {});
-  obj[id] = (obj[id]||0) + 1;
-  writeLS(LS.itemViewsKey, obj);
-}
-
-/* favorites */
-function getFavs(){return readLS(LS.favsKey, [])}
-function toggleFav(id){
-  let favs = getFavs();
-  if(favs.includes(id)){ favs = favs.filter(x=>x!==id); showToast('از علاقه‌مندی‌ها حذف شد') }
-  else { favs.push(id); showToast('به علاقه‌مندی‌ها اضافه شد') }
-  writeLS(LS.favsKey, favs); renderFavUI(); renderPopular();
-}
-
-/* reset local data */
-$('#clearStorage').onclick = ()=>{
-  if(confirm('آیا مایلید داده‌های محلی (آمار، علاقه‌مندی) حذف شود؟')){ localStorage.clear(); location.reload(); }
-}
-
-/* ====== ساعت و تاریخ شمسی و فصل کشاورزی ====== */
+/* ===== ساعت و تاریخ شمسی ===== */
 function updateClockHeader(){
   const time = new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Asia/Tehran'});
   $('#clockHeader').innerText = time;
   $('#clockAhvaz').innerText = time;
 }
 function updatePersianDate(){
-  // استفاده از تقویم فارسی (در مرورگرهای پشتیبانی‌شده)
-  let pers = new Date().toLocaleDateString('fa-IR-u-ca-persian');
+  const pers = new Date().toLocaleDateString('fa-IR-u-ca-persian');
   $('#todayDate').innerText = pers;
-  // فصل کشاورزی ساده بر اساس ماه میلادی محاسبه نشده، از ماه شمسی رُند می‌کنیم:
-  let sh = new Date().toLocaleDateString('fa-IR-u-ca-persian').split('/'); // ['۱۴۰۲','۵','۱۵']
-  let month = parseInt(sh[1]||'1',10);
+  const sh = pers.split('/');
+  const month = parseInt(sh[1]||'1',10);
   let tip = 'فصل نامشخص';
   if([1,12,11].includes(month)) tip = 'آماده‌سازی زمین';
   else if([2,3,4].includes(month)) tip = 'کاشت و مراقبت';
@@ -400,19 +357,44 @@ function updatePersianDate(){
 setInterval(updateClockHeader,1000);
 updateClockHeader(); updatePersianDate();
 
-/* ====== Toast (پیغام کوچک) ====== */
-function showToast(text,ms=2200){
+/* ===== Toast ===== */
+function showToast(text,ms=2000){
   const t = $('#toast'); t.innerText = text; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), ms);
 }
 
-/* ====== render مقالات و محصولات ====== */
+/* ===== آمار بازدید ===== */
+function incPageView(){
+  let total = parseInt(localStorage.getItem(LS.pageViewsKey) || '0',10);
+  total++; localStorage.setItem(LS.pageViewsKey, String(total));
+  $('#pageViews').innerText = 'بازدید کل: ' + total;
+  $('#pageViewsMini').innerText = 'بازدید: ' + total;
+  let series = readLS(LS.visitsSeriesKey, Array(7).fill(0));
+  series[series.length-1] = (series[series.length-1]||0) + 1;
+  writeLS(LS.visitsSeriesKey, series);
+  updateVisitsChart();
+}
+function incItemView(id){
+  let obj = readLS(LS.itemViewsKey, {});
+  obj[id] = (obj[id]||0)+1;
+  writeLS(LS.itemViewsKey, obj);
+}
+
+/* ===== علاقه‌مندی‌ها ===== */
+function getFavs(){ return readLS(LS.favsKey, []) }
+function toggleFav(id){
+  let favs = getFavs();
+  if(favs.includes(id)){ favs = favs.filter(x=>x!==id); showToast('از علاقه‌مندی‌ها حذف شد') }
+  else { favs.push(id); showToast('به علاقه‌مندی‌ها اضافه شد') }
+  writeLS(LS.favsKey, favs); renderFavUI(); renderPopular();
+}
+
+/* ===== رندر مقالات و محصولات ===== */
 function renderArticles(){
   const grid = $('#articleGrid'); grid.innerHTML='';
-  const itemViews = readLS(LS.itemViewsKey,{});
+  const itemViews = readLS(LS.itemViewsKey, {});
   ARTICLES.forEach(a=>{
-    const el = document.createElement('div'); el.className='article fade-in';
-    el.dataset.id=a.id;
+    const el = document.createElement('div'); el.className='article fade-in'; el.dataset.id=a.id;
     el.innerHTML = `
       <div class="badge">${a.fresh? 'تازه':'مقاله'}</div>
       <div class="star" title="افزودن به علاقه‌مندی">☆</div>
@@ -420,24 +402,24 @@ function renderArticles(){
       <p style="color:#456">${a.desc}</p>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
         <small>${(itemViews[a.id]||0)} بازدید</small>
-        <button class="btn" data-id="${a.id}">بیشتر</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn" data-id="${a.id}">بیشتر</button>
+        </div>
       </div>
     `;
-    // events
-    el.querySelector('.star').onclick = (e)=>{ e.stopPropagation(); toggleFav(a.id); el.querySelector('.star').classList.toggle('active'); animateStar(el.querySelector('.star')) }
+    const star = el.querySelector('.star');
+    star.onclick = (e)=>{ e.stopPropagation(); toggleFav(a.id); star.classList.toggle('active'); animateStar(star); }
     el.querySelector('button').onclick = ()=>{ incItemView(a.id); showArticleModal(a) }
-    el.onclick = ()=>{ el.classList.toggle('open') }
     grid.appendChild(el);
   });
 }
 function renderProducts(){
   const grid = $('#productGrid'); grid.innerHTML='';
-  const itemViews = readLS(LS.itemViewsKey,{});
+  const itemViews = readLS(LS.itemViewsKey, {});
   PRODUCTS.forEach(p=>{
-    const el = document.createElement('div'); el.className='product fade-in';
-    el.dataset.id=p.id;
+    const el = document.createElement('div'); el.className='product fade-in'; el.dataset.id=p.id;
     el.innerHTML = `
-      <div class="badge" style="background:${p.fresh? 'var(--accent)': 'var(--primary)'}">${p.fresh? 'تازه':'محصول'}</div>
+      <div class="badge" style="background:${p.fresh? 'var(--accent)':'var(--primary)'}">${p.fresh? 'تازه':'محصول'}</div>
       <div style="display:flex;gap:12px;align-items:center">
         <img src="${p.img}" alt="${p.title}" style="width:96px;height:72px;object-fit:cover;border-radius:8px" loading="lazy">
         <div style="flex:1">
@@ -455,13 +437,12 @@ function renderProducts(){
   });
 }
 
-/* ====== علاقه‌مندی‌ها UI ====== */
+/* ===== علاقه‌مندی UI ===== */
 function renderFavUI(){
   const ul = $('#favList'); ul.innerHTML='';
   const favs = getFavs();
   if(!favs.length){ ul.innerHTML='<li>هنوز چیزی ستاره‌دار نشده</li>'; return; }
   favs.forEach(id=>{
-    // پیدا کردن عنوان از ARTICLES یا PRODUCTS
     const art = ARTICLES.find(x=>x.id===id);
     const pr = PRODUCTS.find(x=>x.id===id);
     const title = art ? art.title : (pr ? pr.title : id);
@@ -469,61 +450,46 @@ function renderFavUI(){
   });
 }
 
-/* ====== Popular suggestions بر اساس بازدید و favorites ====== */
+/* ===== محبوب‌ها ===== */
 function renderPopular(){
   const pop = $('#popularList'); pop.innerHTML='';
-  // ترکیب اطلاعات: بازدید و محبوبیت دستی
-  const itemViews = readLS(LS.itemViewsKey,{});
-  // محصولات محبوب سخت‌کد: محصولاتی که popular=true یا در favorites هستند
+  const itemViews = readLS(LS.itemViewsKey, {});
   const favs = getFavs();
   const combined = PRODUCTS.map(p=>({
     id:p.id, title:p.title, score:(p.popular?3:0)+(favs.includes(p.id)?2:0)+(itemViews[p.id]||0)
   })).sort((a,b)=>b.score-a.score);
   combined.slice(0,4).forEach(c=>{
-    const d = document.createElement('div'); d.className='product';
-    d.style.padding='8px'; d.innerHTML = `<strong>${c.title}</strong><div style="font-size:12px;color:#666">${c.score} امتیاز</div>`;
+    const d = document.createElement('div'); d.className='product'; d.style.padding='8px';
+    d.innerHTML = `<strong>${c.title}</strong><div style="font-size:12px;color:#666">${c.score} امتیاز</div>`;
     pop.appendChild(d);
   });
 }
 
-/* ====== Article/Product modals (ساده) ====== */
-function showArticleModal(a){
-  showToast('باز کردن مقاله: ' + a.title,1200);
-  incItemView(a.id);
-}
-function showProductModal(p){
-  showToast('نمایش محصول: ' + p.title,1200);
-  incItemView(p.id);
-}
+/* ===== modals ساده (نمایش) ===== */
+function showArticleModal(a){ showToast('باز کردن مقاله: ' + a.title,1200); incItemView(a.id); }
+function showProductModal(p){ showToast('نمایش محصول: ' + p.title,1200); incItemView(p.id); }
 
-/* ====== Hero Carousel controls ====== */
+/* ===== hero carousel ===== */
 let heroIdx=0;
 function heroNext(){ const s=$('#heroCarousel .slides'); heroIdx=(heroIdx+1)%s.children.length; s.style.transform=`translateX(-${heroIdx*100}%)` }
 function heroPrev(){ const s=$('#heroCarousel .slides'); heroIdx=(heroIdx-1 + s.children.length)%s.children.length; s.style.transform=`translateX(-${heroIdx*100}%)` }
 setInterval(()=>{ heroNext() },6000);
 
-/* ====== Search ====== */
+/* ===== search ===== */
 $('#searchBtn').onclick = ()=>doSearch();
 $('#searchInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch() });
 $('#clearSearch').onclick = ()=>{ $('#searchInput').value=''; renderArticles(); renderProducts(); }
 function doSearch(){
   const q = $('#searchInput').value.trim().toLowerCase();
   if(!q){ renderArticles(); renderProducts(); return; }
-  // filter articles
   const artGrid = $('#articleGrid'); artGrid.innerHTML='';
-  ARTICLES.filter(a=> (a.title+a.desc+(a.tags||[]).join(' ')).toLowerCase().includes(q) ).forEach(a=>{
-    artGrid.appendChild(createArticleCard(a));
-  });
-  // filter products
+  ARTICLES.filter(a=> (a.title+a.desc+(a.tags||[]).join(' ')).toLowerCase().includes(q) ).forEach(a=> artGrid.appendChild(createArticleCard(a)));
   const prGrid = $('#productGrid'); prGrid.innerHTML='';
-  PRODUCTS.filter(p=> (p.title + p.price).toLowerCase().includes(q)).forEach(p=>{
-    prGrid.appendChild(createProductCard(p));
-  });
+  PRODUCTS.filter(p=> (p.title + p.price).toLowerCase().includes(q)).forEach(p=> prGrid.appendChild(createProductCard(p)));
 }
-/* helper create card for search (used above) */
 function createArticleCard(a){
   const el = document.createElement('div'); el.className='article fade-in'; el.dataset.id=a.id;
-  el.innerHTML = `<div class="badge">${a.fresh? 'تازه':'مقاله'}</div><div class="star">☆</div><h3 style="margin:8px 0">${a.title}</h3><p style="color:#456">${a.desc}</p>`;
+  el.innerHTML = `<div class="badge">${a.fresh? 'تازه':'مقاله'}</div><div class="star" title="افزودن به علاقه‌مندی">☆</div><h3 style="margin:8px 0">${a.title}</h3><p style="color:#456">${a.desc}</p>`;
   el.querySelector('.star').onclick = (e)=>{ e.stopPropagation(); toggleFav(a.id); el.querySelector('.star').classList.toggle('active'); animateStar(el.querySelector('.star')) }
   return el;
 }
@@ -535,16 +501,15 @@ function createProductCard(p){
   return el;
 }
 
-/* ====== Weather (OpenWeatherMap) ====== */
+/* ===== Weather (OpenWeatherMap) ===== */
 async function showWeatherData(data){
-  if(!data || data.cod!==200){ $('#weatherResult').querySelector('#weatherCanvas').innerText='—'; $('#weatherInfo').innerText='شهر یافت نشد یا خطا'; return; }
+  if(!data || data.cod!==200){ $('#weatherCanvas').innerText='—'; $('#weatherInfo').innerText='شهر یافت نشد یا خطا'; return; }
   const name = data.name;
   const t = Math.round(data.main.temp);
   const desc = data.weather[0].description;
   const hum = data.main.humidity;
   $('#weatherCanvas').innerText = t + '°';
   $('#weatherInfo').innerHTML = `<strong>${name}</strong><div style="margin-top:8px">${desc} — رطوبت: ${hum}%</div>`;
-  // افکت ساده هوا
   const w = data.weather[0].main.toLowerCase();
   if(w.includes('rain')||w.includes('shower')) document.body.classList.add('raining'); else document.body.classList.remove('raining');
 }
@@ -567,78 +532,68 @@ async function getWeatherByCoords(lat,lon){
 $('#getWeatherBtn').onclick = ()=>{ const c = $('#cityName').value.trim() || 'Ahvaz'; getWeatherByCity(c) }
 $('#btnMyLoc').onclick = ()=>{ navigator.geolocation.getCurrentPosition(p=> getWeatherByCoords(p.coords.latitude,p.coords.longitude), ()=> showToast('موقعیت یافت نشد')) }
 
-/* ====== Map (Leaflet) ====== */
+/* ===== Maps (Leaflet) ===== */
 function initMaps(){
-  // main sidebar map
-  const map = L.map('map',{attributionControl:false}).setView([31.3183,48.6706],11); // اهواز
+  const map = L.map('map',{attributionControl:false}).setView([31.3183,48.6706],11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-  // چند فروشنده نمونه
   const sellers = [
     {name:'فروشگاه الف', coords:[31.335,48.669]},
     {name:'مزرعه ب', coords:[31.28,48.64]},
     {name:'بازار محلی', coords:[31.32,48.68]}
   ];
   sellers.forEach(s=>L.marker(s.coords).addTo(map).bindPopup(s.name));
-  // mini map
   const mini = L.map('miniMap',{attributionControl:false}).setView([31.3183,48.6706],11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(mini);
   sellers.slice(0,2).forEach(s=>L.circle(s.coords,{radius:500,color:'#2e7d32',fill:true,fillOpacity:0.12}).addTo(mini));
 }
 initMaps();
 
-/* ====== Visits chart ====== */
+/* ===== Visits chart (Chart.js) ===== */
 let visitsChart=null;
 function updateVisitsChart(){
   const ctx = document.getElementById('visitsChart').getContext('2d');
   let series = readLS(LS.visitsSeriesKey, Array(7).fill(0));
-  // ensure length 7
   while(series.length<7) series.unshift(0);
   const labels = ['۶ روز','۵ روز','۴ روز','۳ روز','دیروز','امروز','امروز'];
   if(visitsChart){ visitsChart.data.datasets[0].data = series; visitsChart.update(); return; }
   visitsChart = new Chart(ctx, {
     type:'bar',
     data:{ labels, datasets:[{label:'بازدید', data:series, borderRadius:6, backgroundColor:'rgba(46,125,50,0.7)'}] },
-    options:{responsive:true,plugins:{legend:{display:false}}}
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
   });
 }
 updateVisitsChart();
 
-/* ====== Popular render & initial render ====== */
+/* ===== initial render ===== */
 function initialRender(){
   renderArticles(); renderProducts(); renderFavUI(); renderPopular();
-  // update pageviews
   $('#pageViews').innerText = 'بازدید کل: ' + (localStorage.getItem(LS.pageViewsKey) || '0');
   $('#pageViewsMini').innerText = 'بازدید: ' + (localStorage.getItem(LS.pageViewsKey) || '0');
-  // attach events to article/product dynamic buttons via delegation
-  // fade-in reveal
   const obs = new IntersectionObserver(entries=>{ entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('show'); obs.unobserve(en.target) } }) }, {threshold:0.12});
   document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
 }
 initialRender();
-
-/* ====== Increment page view on load ====== */
 incPageView();
 
-/* ====== small UI helpers ====== */
+/* ===== sidebar open/close ===== */
 $('#openSidebar').onclick = ()=>{
   $('#sidebar').classList.add('open'); $('#overlay').classList.add('show'); $('#sidebar').setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
 };
 $('#closeSidebar').onclick = ()=>{ $('#sidebar').classList.remove('open'); $('#overlay').classList.remove('show'); $('#sidebar').setAttribute('aria-hidden','true'); document.body.style.overflow=''; };
 $('#overlay').onclick = ()=>{ $('#closeSidebar').click() };
 
-/* ====== star animation ====== */
+/* ===== star animation ===== */
 function animateStar(el){
   el.animate([{transform:'scale(0.9)'},{transform:'scale(1.25)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.2,.8,.2,1)'});
 }
 
-/* ====== simple chat (local simulation) ====== */
+/* ===== chat (local sim) ===== */
 $('#sendChat').onclick = sendChat;
 $('#chatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') sendChat(); });
 function sendChat(){
   const v = $('#chatInput').value.trim(); if(!v) return;
   addChatMessage('user', v); $('#chatInput').value='';
-  // simulated reply
-  setTimeout(()=> addChatMessage('bot', 'متشکرم! کارشناسان ما به زودی پاسخ می‌دهند. (پاسخ نمونه)') , 900);
+  setTimeout(()=> addChatMessage('bot', 'متشکرم! کارشناسان ما به‌زودی پاسخ می‌دهند. (پاسخ نمونه)') , 900);
 }
 function addChatMessage(who, text){
   const box = $('#chatBox');
@@ -649,15 +604,13 @@ function addChatMessage(who, text){
   box.appendChild(el); box.scrollTop = box.scrollHeight;
 }
 
-/* ====== FAQ toggle ====== */
+/* ===== faq toggle ===== */
 function toggleAC(btn){
   const body = btn.nextElementSibling;
   body.style.display = body.style.display==='block' ? 'none' : 'block';
 }
 
-/* ====== Mini maps already init above ====== */
-
-/* ====== play small beep on actions (WebAudio) ====== */
+/* ===== sound beep ===== */
 function beep(freq=440,dur=0.06){
   try{
     const ctx = new (window.AudioContext||window.webkitAudioContext)();
@@ -668,15 +621,13 @@ function beep(freq=440,dur=0.06){
     setTimeout(()=>{ o.stop(); ctx.close(); }, dur*1000);
   }catch(e){}
 }
-// add beep to favorites and search
 document.addEventListener('click', e=>{
   if(e.target.classList && e.target.classList.contains('star')) beep(880,0.06);
   if(e.target.id==='searchBtn') beep(660,0.05);
 });
 
-/* ====== small animation for star activation from persisted favs ====== */
+/* ===== helpers for initial star state and favorites persistence ===== */
 document.addEventListener('DOMContentLoaded', ()=>{
-  // mark stars active if in favs
   const favs = getFavs();
   document.querySelectorAll('.article').forEach(a=>{
     const id = a.dataset.id;
@@ -684,13 +635,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 
-/* ====== lazy: update popular each minute ====== */
+/* ===== clear local storage button ===== */
+$('#clearStorage').onclick = ()=>{
+  if(confirm('آیا مایلید داده‌های محلی پاک شود؟')){ localStorage.clear(); location.reload(); }
+}
+
+/* ===== lazy update popular ===== */
 setInterval(()=>{ renderPopular() }, 60*1000);
 
-/* ====== finally, initial weather load for Ahvaz ====== */
+/* ===== initial weather load ===== */
 getWeatherByCity('Ahvaz');
 
-/* ====== small accessibility: focus outline on keyboard nav ====== */
+/* ===== accessibility focus outline toggle ===== */
 document.addEventListener('keydown', e=>{ if(e.key==='Tab') document.body.classList.add('user-tab') });
 </script>
 </body>
