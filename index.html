@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مای‌ده - بازار و هواشناسی اهواز</title>
+<title>مای‌ده - بازار و مقالات کشاورزی اهواز</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -14,9 +14,10 @@
 }
 body{margin:0;font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);}
 a{text-decoration:none;color:var(--primary);}
-header{position:sticky;top:0;background:var(--primary);color:#fff;padding:12px 16px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;}
-header h1{margin:0;font-size:20px;}
-#menuBtn{background:#fff;color:var(--primary);border:none;padding:8px 12px;border-radius:8px;cursor:pointer;}
+header{position:sticky;top:0;background:var(--primary);color:#fff;padding:20px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+header h1{margin:0;font-size:32px;font-weight:800;}
+header p{margin:4px 0 0;font-size:16px;}
+header .links a{margin-left:12px;background:#fff;color:var(--primary);padding:8px 12px;border-radius:8px;font-weight:600;}
 .sidebar{position:fixed;top:0;right:-300px;width:280px;height:100%;background:var(--primary);color:#fff;padding:20px;transition:0.3s;z-index:1000;overflow-y:auto;}
 .sidebar.active{right:0;}
 .sidebar h2{margin-top:0;}
@@ -24,11 +25,6 @@ header h1{margin:0;font-size:20px;}
 main{padding:20px;}
 .card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:20px;box-shadow:var(--shadow);transition:0.2s;}
 .card:hover{transform:scale(1.02);}
-.carousel{position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--border);}
-.slides{display:flex;transition:transform .35s ease;}
-.slides img{width:100%;flex:0 0 100%;}
-.car-btn{position:absolute;top:50%;transform:translateY(-50%);border:none;background:#0007;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;}
-.car-prev{left:6px;} .car-next{right:6px;}
 .article{border:1px solid var(--border);border-radius:12px;padding:12px;margin:8px 0;position:relative;background:var(--card);}
 .article .star{position:absolute;top:10px;left:10px;cursor:pointer;font-size:18px;color:#bbb;}
 .article .star.active{color:gold;}
@@ -39,74 +35,67 @@ main{padding:20px;}
 .faq-item p{padding:10px;margin:0;display:none;background:#fff;}
 .faq-item.open p{display:block;}
 footer{text-align:center;padding:16px;background:var(--primary);color:#fff;margin-top:20px;}
+input.search{padding:8px;border-radius:8px;border:1px solid var(--border);width:calc(100% - 100px);}
+button.searchBtn{padding:8px 12px;border:none;background:var(--primary);color:#fff;border-radius:8px;cursor:pointer;margin-left:4px;}
 </style>
 </head>
 <body>
 
-<!-- دکمه منو -->
 <header>
-  <h1>🌱 مای‌ده</h1>
-  <button id="menuBtn">☰ منو</button>
+  <div>
+    <h1>🌱 مای‌ده</h1>
+    <p>بازار و مقالات کشاورزی اهواز | فروش مستقیم محصولات محلی | پرداخت حضوری</p>
+  </div>
+  <div class="links">
+    <a href="https://mehdieidani.github.io/Hava-Ahwaz55/" target="_blank">🌤️ هواشناسی</a>
+    <button id="menuBtn">☰ منو</button>
+  </div>
 </header>
 
-<!-- سایدبار -->
 <aside class="sidebar" id="sidebar">
   <h2>منو</h2>
   <a href="#home">خانه</a>
   <a href="#products">محصولات</a>
   <a href="#articles">مقالات</a>
-  <a href="#weather">هواشناسی</a>
   <a href="#faq">سوالات متداول</a>
   <a href="#contact">تماس با ما</a>
 </aside>
 
 <main id="home">
-  <!-- ساعت و تاریخ -->
+  <!-- جستجو -->
   <div class="card">
-    <h3>⏰ ساعت و تاریخ</h3>
-    <p id="clock"></p>
-    <p id="date"></p>
-  </div>
-
-  <!-- آمار بازدید -->
-  <div class="card">
-    <h3>📊 آمار بازدید</h3>
-    <p>بازدید امروز: <span id="todayVisits">0</span></p>
-    <p>بازدید کل: <span id="totalVisits">0</span></p>
-  </div>
-
-  <!-- هواشناسی -->
-  <div class="card" id="weather">
-    <h3>🌤️ وضعیت هوا (اهواز)</h3>
-    <p id="weatherResult">در حال بارگذاری...</p>
+    <h3>🔍 جستجو مقالات و محصولات</h3>
+    <input class="search" id="searchInput" placeholder="نام محصول یا مقاله…">
+    <button class="searchBtn" id="searchBtn">جستجو</button>
   </div>
 
   <!-- محصولات -->
   <div class="card" id="products">
-    <h3>🛒 محصولات کشاورزی</h3>
-    <div class="carousel" data-index="0">
-      <div class="slides">
-        <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+1" alt="خیار1">
-        <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+2" alt="خیار2">
-        <img src="https://via.placeholder.com/800x420?text=%D8%AE%DB%8C%D8%A7%D8%B1+3" alt="خیار3">
-      </div>
-      <button class="car-btn car-prev">‹</button>
-      <button class="car-btn car-next">›</button>
-    </div>
+    <h3>🛒 محصولات</h3>
+    <article class="article" data-title="خیار تازه">
+      <div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div>
+      <h4>خیار تازه اهواز</h4>
+      <div class="content">برداشت مستقیم از مزرعه. خرید حضوری. <a href="https://github.com/mehdieidani" target="_blank">جزئیات بیشتر</a></div>
+    </article>
+    <article class="article" data-title="گوجه محلی">
+      <div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div>
+      <h4>گوجه محلی رسیده</h4>
+      <div class="content">تازه و خوش‌عطر. مناسب سس و سالاد. <a href="https://github.com/mehdieidani" target="_blank">جزئیات بیشتر</a></div>
+    </article>
   </div>
 
   <!-- مقالات -->
   <div class="card" id="articles">
     <h3>📚 مقالات</h3>
-    <article class="article" data-id="art1">
+    <article class="article" data-title="کشت خیار">
       <div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div>
       <h4>کشت خیار در اهواز</h4>
-      <div class="content">خیار در اوایل ماه ۶ کاشته و بعد ۴۰ روز برداشت می‌شود...</div>
+      <div class="content">خیار در اوایل ماه ۶ کاشته و بعد ۴۰ روز برداشت می‌شود. <a href="https://github.com/mehdieidani" target="_blank">مطالعه کامل</a></div>
     </article>
-    <article class="article" data-id="art2">
+    <article class="article" data-title="کشت گوجه">
       <div class="star" title="افزودن به علاقه‌مندی‌ها">☆</div>
       <h4>گوجه‌فرنگی در اهواز</h4>
-      <div class="content">گوجه با روش جوی و پشته و آبیاری غرقابی کاشته می‌شود...</div>
+      <div class="content">روش جوی و پشته، آبیاری غرقابی. <a href="https://github.com/mehdieidani" target="_blank">مطالعه کامل</a></div>
     </article>
   </div>
 
@@ -132,6 +121,7 @@ footer{text-align:center;padding:16px;background:var(--primary);color:#fff;margi
 </main>
 
 <footer>
+  📊 بازدید امروز: <span id="todayVisits">0</span> | بازدید کل: <span id="totalVisits">0</span><br>
   © 2025 مای‌ده — ساخته شده با ❤️
 </footer>
 
@@ -140,27 +130,6 @@ footer{text-align:center;padding:16px;background:var(--primary);color:#fff;margi
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 menuBtn.onclick = () => sidebar.classList.toggle("active");
-
-// ساعت و تاریخ
-function updateClock(){
-  const now = new Date();
-  document.getElementById("clock").innerText = now.toLocaleTimeString('fa-IR');
-  document.getElementById("date").innerText = now.toLocaleDateString('fa-IR');
-}
-setInterval(updateClock,1000);
-updateClock();
-
-// آمار بازدید
-let totalVisits = parseInt(localStorage.getItem("totalVisits")||0);
-let lastVisit = localStorage.getItem("lastVisitDate");
-let today = new Date().toLocaleDateString();
-let todayVisits = (lastVisit===today)?parseInt(localStorage.getItem("todayVisits")||0):0;
-totalVisits++; todayVisits++;
-localStorage.setItem("totalVisits",totalVisits);
-localStorage.setItem("todayVisits",todayVisits);
-localStorage.setItem("lastVisitDate",today);
-document.getElementById("totalVisits").innerText=totalVisits;
-document.getElementById("todayVisits").innerText=todayVisits;
 
 // علاقه‌مندی‌ها
 document.querySelectorAll('.article .star').forEach(star=>{
@@ -178,33 +147,27 @@ document.querySelectorAll('.faq-item h4').forEach(h=>{
   h.onclick = ()=>h.parentElement.classList.toggle('open');
 });
 
-// Carousel
-document.querySelectorAll('.carousel').forEach(car=>{
-  const slides = car.querySelector('.slides');
-  const imgs = slides.querySelectorAll('img');
-  let idx = 0;
-  car.querySelector('.car-next').onclick=()=>{
-    idx = (idx+1)%imgs.length;
-    slides.style.transform=`translateX(-${idx*100}%)`;
-  }
-  car.querySelector('.car-prev').onclick=()=>{
-    idx = (idx-1+imgs.length)%imgs.length;
-    slides.style.transform=`translateX(-${idx*100}%)`;
-  }
-});
-
-// هواشناسی
-async function getWeather(){
-  const key='dc9c93f51cdd375d459483c2a9f86d88';
-  try{
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Ahvaz&appid=${key}&units=metric&lang=fa`);
-    const data = await res.json();
-    document.getElementById('weatherResult').innerText = `دما: ${data.main.temp}°C | وضعیت: ${data.weather[0].description}`;
-  }catch(e){
-    document.getElementById('weatherResult').innerText='خطا در دریافت اطلاعات هواشناسی';
-  }
+// جستجوی هوشمند
+function normalize(text){return text.replace(/\s+/g,'').toLowerCase();}
+document.getElementById('searchBtn').onclick = ()=>{
+  const query = normalize(document.getElementById('searchInput').value);
+  document.querySelectorAll('.article').forEach(a=>{
+    const title = normalize(a.dataset.title);
+    a.style.display = title.includes(query)?'block':'none';
+  });
 }
-getWeather();
+
+// آمار بازدید
+let totalVisits = parseInt(localStorage.getItem("totalVisits")||0);
+let lastVisit = localStorage.getItem("lastVisitDate");
+let today = new Date().toLocaleDateString();
+let todayVisits = (lastVisit===today)?parseInt(localStorage.getItem("todayVisits")||0):0;
+totalVisits++; todayVisits++;
+localStorage.setItem("totalVisits",totalVisits);
+localStorage.setItem("todayVisits",todayVisits);
+localStorage.setItem("lastVisitDate",today);
+document.getElementById("totalVisits").innerText=totalVisits;
+document.getElementById("todayVisits").innerText=todayVisits;
 </script>
 
 </body>
